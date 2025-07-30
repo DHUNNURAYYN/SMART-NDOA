@@ -1,0 +1,158 @@
+<?php
+include '../connection.php';
+include '../session_check.php';
+
+if (!isset($_GET['id'])) {
+    echo "⚠️ Hakuna mtumiaji aliyechaguliwa.";
+    exit;
+}
+
+$user_id = $_GET['id'];
+
+// Get the user details
+$sql = "SELECT full_name, email, role FROM users WHERE user_id = ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("i", $user_id);
+$stmt->execute();
+$result = $stmt->get_result();
+
+if ($result->num_rows == 0) {
+    echo "⚠️ Mtumiaji hajapatikana.";
+    exit;
+}
+
+$row = $result->fetch_assoc();
+
+// Roles dropdown options
+$roles = ['Admin', 'Student', 'Moderator', 'Teacher']; // Add or edit roles as needed
+?>
+
+    <!DOCTYPE html>
+    <html lang="sw">
+
+    <head>
+        <meta charset="UTF-8">
+        <title>Edit User</title>
+        <style>
+            form {
+                width: 400px;
+                margin: 50px auto;
+                padding: 20px;
+                background: #f9f9f9;
+                border-radius: 10px;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            }
+            
+            label {
+                display: block;
+                margin-top: 15px;
+            }
+            
+            input,
+            select {
+                width: 100%;
+                padding: 10px;
+                margin-top: 5px;
+                border-radius: 5px;
+                border: 1px solid #ccc;
+            }
+            
+            button {
+                margin-top: 20px;
+                padding: 10px 15px;
+                background: #0066cc;
+                color: #fff;
+                border: none;
+                border-radius: 5px;
+            }
+        </style>
+    </head>
+
+    <body>
+
+        <form method="POST" action="update_user.php">
+            <h3>✏️ Hariri Taarifa za Mtumiaji</h3>
+
+            <input type="hidden" name="user_id" value="<?= $user_id ?>">
+
+            <label>Jina Kamili:</label>
+            <input type="text" name="full_name" value="<?= htmlspecialchars($row['full_name']) ?>" required>
+
+            <label>Barua Pepe:</label>
+            <input type="email" name="email" value="<?= htmlspecialchars($row['email']) ?>" required>
+
+            <label>Nafasi (Role):</label>
+            <select name="role" required>
+        <?php foreach ($roles as $role): ?>
+            <option value="<?= $role ?>" <?= ($role == $row['role']) ? 'selected' : '' ?>>
+                <?= $role ?>
+            </option>
+        <?php endforeach; ?>
+    </select>
+
+            <button type="submit">💾 Hifadhi Mabadiliko</button>
+        </form>
+
+    </body>
+
+    </html>
+
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    <?php
+include '../connection.php'; // Connect to the DB
+include '../session_check.php';
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    // Target directory for uploads
+    $target_dir = "uploads/";
+    if (!file_exists($target_dir)) {
+        mkdir($target_dir, 0777, true);
+    }
+
+    // File upload
+    $zanid = $_FILES["zanid"]["name"];
+    $zanid_tmp = $_FILES["zanid"]["tmp_name"];
+    $zanid_path = $target_dir . time() . '_' . basename($zanid); // unique filename
+    move_uploaded_file($zanid_tmp, $zanid_path);
+
+    // Collect form data
+    $name = $_POST['name'];
+    $gender = $_POST['gender'];
+    $dob = $_POST['dob'];
+    $nationality = $_POST['uraia'];
+    $shehia = $_POST['shehia'];
+    $district = $_POST['wilaya'];
+    $phone = $_POST['phone'];
+    $employed = $_POST['umeajiriwa'];
+    $workplace = isset($_POST['sehemu']) ? $_POST['sehemu'] : null; // nullable
+    $marital_status = $_POST['ndoa'];
+    $disability = $_POST['disability'];
+    $education_level = $_POST['elimu'];
+
+    // Prepare and execute insert query
+    $sql = "INSERT INTO application_form (
+        full_name, gender, dob, nationality, shehia, district, phone,
+        employed, workplace, marital_status, disability, id_picture, education_level
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param(
+        "sssssssssssss",
+        $name, $gender, $dob, $nationality, $shehia, $district, $phone,
+        $employed, $workplace, $marital_status, $disability, $zanid_path, $education_level
+    );
+
+    if ($stmt->execute()) {
+        echo "<script>alert('Maombi yako yametumwa kikamilifu! '); window.location.href='applicant_dashboard.php';</script>";
+    } else {
+        echo "<script>alert('Kuna tatizo wakati wa kutuma maombi. '); window.history.back();</script>";
+    }
+
+    $stmt->close();
+    $conn->close();
+} else {
+    header("Location: ../student/index.php");
+    exit;
+}
+?>

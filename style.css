@@ -1,0 +1,111 @@
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background: whitesmoke;
+            /* Kijani laini */
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .login-container {
+            background: white;
+            backdrop-filter: blur(10px);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 0 10px #205B40;
+            /* kivuli cha kijani */
+            text-align: center;
+            width: 420px;
+            /* kidogo posh kuipanua */
+        }
+        
+        .input-group {
+            box-shadow: 0 0 5px #205B40;
+            position: relative;
+            margin: 15px 0;
+        }
+        
+        .input-group i {
+            position: absolute;
+            top: 50%;
+            left: 12px;
+            transform: translateY(-50%);
+            color: #006400;
+            /* dark green icon */
+        }
+        
+        .input-group input {
+            width: 90%;
+            padding: 12px 12px 12px 40px;
+            border: none;
+            border-radius: 5px;
+            box-shadow: 0 0 5px #205B40;
+            /* background-color: #32CD32; */
+            /* LimeGreen */
+            color: #100f0f;
+        }
+        
+        .input-group input::placeholder {
+            /* color: #141514; */
+        }
+        
+        .options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+            color: #006400;
+            margin: 15px 0;
+        }
+        
+        button {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            background-color: #228B22;
+            /* SeaGreen */
+            color: #fff;
+            font-size: 16px;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+        
+        button:hover {
+            background-color: #2E8B57;
+            /* Hover - dark green */
+        }
+        /* .user-logo {
+    width: 100px;
+    height: 100px;
+    margin: 0 auto 20px;
+    border-radius: 50%;
+    overflow: hidden;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+} */
+        
+        .user-logo img {
+            width: 25%;
+            height: auto;
+            /* object-fit: cover;
+    display: block; */
+        }
+        
+        .register-link {
+            margin-top: 15px;
+            font-size: 14px;
+            color: #006400;
+        }
+        
+        .register-link a {
+            color: #228B22;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        
+        .register-link a:hover {
+            text-decoration: underline;
+        }

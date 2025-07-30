@@ -1,0 +1,90 @@
+<?php
+include 'session_check.php';
+
+$sql = "SELECT * FROM questions WHERE email = ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("s", $_SESSION['student_email']); // or use session value
+$stmt->execute();
+$result = $stmt->get_result();
+
+?>
+    <!DOCTYPE html>
+    <html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <title>Ask a Question</title>
+        <link rel="stylesheet" href="styles.css">
+        <!-- Your custom styles -->
+        <style>
+            .question-form {
+                width: 80%;
+                margin: 0 auto;
+                padding: 20px;
+                border-radius: 8px;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+                background: #f9f9f9;
+            }
+            
+            .form-group {
+                margin-bottom: 15px;
+            }
+            
+            .form-group label {
+                font-size: 16px;
+                margin-bottom: 5px;
+                display: block;
+            }
+            
+            .form-group input,
+            .form-group textarea {
+                width: 100%;
+                padding: 10px;
+                font-size: 14px;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+            }
+            
+            .form-group button {
+                padding: 10px 15px;
+                background-color: #16a085;
+                color: white;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+            }
+            
+            .form-group button:hover {
+                background-color: #1abc9c;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div class="question-form">
+            <h2>Ask a Question</h2>
+            <form action="submit_question.php" method="POST">
+                <div class="form-group">
+                    <label for="full_name">Your Name:</label>
+                    <input type="text" id="full_name" name="full_name" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">Your Email:</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="content">Your Question:</label>
+                    <textarea id="content" name="content" rows="5" required></textarea>
+                </div>
+                <div class="form-group">
+                    <button type="submit">Submit Question</button>
+                </div>
+                <?php
+            echo "<p><strong>Q:</strong> {$row['content']}</p>";
+        echo "<p><strong>A:</strong> " . ($row['answer'] ? $row['answer'] : "<i>Not answered yet</i>") . "</p>";
+        ?>
+            </form>
+        </div>
+    </body>
+
+    </html>

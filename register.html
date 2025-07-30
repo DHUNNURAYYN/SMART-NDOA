@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Register</title>
+    <link rel="stylesheet" href="register.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+
+<body>
+    <div class="register-container">
+        <div class="user-logo">
+            <img src="Logo/logo.JPG" alt="Mufti Logo">
+        </div>
+        <form action="save_user.php" method="post">
+            <div class="input-group">
+                <i class="fas fa-user"></i>
+                <input type="text" name="fullname" placeholder="Full Name" required>
+            </div>
+            <div class="input-group">
+                <i class="fas fa-envelope"></i>
+                <input type="email" name="email" placeholder="Email ID" required>
+            </div>
+            <div class="input-group">
+                <i class="fas fa-lock"></i>
+                <input type="password" name="password" placeholder="Password" required>
+            </div>
+            <div class="input-group">
+                <i class="fas fa-lock"></i>
+                <input type="password" name="confirm_password" placeholder="Confirm Password" required>
+            </div>
+            <div class="options">
+                <label><input type="checkbox" name="terms"> I agree to the terms</label>
+            </div>
+            <button type="submit">REGISTER</button>
+        </form>
+    </div>
+</body>
+
+</html>
