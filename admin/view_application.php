@@ -28,7 +28,7 @@ $form = $result->fetch_assoc();
 <html lang="sw">
 <head>
     <meta charset="UTF-8">
-    <title>Maombi ya Muombaji - Smart Ndoa</title>
+    <title>View Application</title>
     <link rel="stylesheet" href="../dashboard.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
@@ -102,6 +102,36 @@ img {
     border-radius: 4px;
 }
 
+.kitambulisho-img {
+    max-width: 120px;
+    border-radius: 5px;
+    margin-top: 5px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    transition: transform 0.2s ease;
+}
+
+.kitambulisho-img:hover {
+    transform: scale(1.05);
+}
+
+.download-btn {
+    display: inline-block;
+    margin-top: 8px;
+    padding: 6px 14px;
+    background-color: #2ecc71;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    transition: background-color 0.3s ease;
+}
+
+.download-btn:hover {
+    background-color: #27ae60;
+}
+
+
     </style>
    
         
@@ -113,7 +143,7 @@ img {
 
     <div class="main-content">
         <header>
-            <h1>📋 Maombi ya Muombaji</h1>
+            <h1>View Application</h1>
         </header>
 
         <div class="info-box">
@@ -133,11 +163,21 @@ img {
                 <tr><th>Kiwango cha Elimu</th><td><?= $form['education_level'] ?></td></tr>
                 <tr><th>Status ya Maombi</th><td><strong><?= ucfirst($form['status']) ?></strong></td></tr>
                 <tr>
-                    <th>Kitambulisho</th>
-                    <td>
-                        <!-- <img src="<?= htmlspecialchars($form['id_picture']) ?>" alt="Kitambulisho"> -->
-                        <img src="<?= htmlspecialchars('/applicant/' . $form['id_picture']) ?>" alt="Kitambulisho">
-                    </td>
+                   <th>Kitambulisho</th>
+                <td>
+                    <!-- Clickable image for download -->
+                    <a href="<?= htmlspecialchars('/applicant/' . $form['id_picture']) ?>" download>
+                        <img src="<?= htmlspecialchars('/applicant/' . $form['id_picture']) ?>" alt="Kitambulisho" class="kitambulisho-img">
+                    </a>
+                    
+                    <!-- Download button -->
+                    <br>
+                    <a href="<?= htmlspecialchars('/applicant/' . $form['id_picture']) ?>" download class="download-btn">
+                        Download ID CARD
+                    </a>
+                </td>
+
+
                 </tr>
             </table>
 
