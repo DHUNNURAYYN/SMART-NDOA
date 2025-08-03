@@ -3,7 +3,7 @@ include('../connection.php');
 
 if (isset($_POST['submit'])) {
     $fullname = $_POST['fullname'];
-    $phone = $_POST['phone']; // <-- new
+    $phone = $_POST['phone'];
     $email = $_POST['email'];
     $password = $_POST['password'];
     $confirm_password = $_POST['confirm_password'];
@@ -13,7 +13,16 @@ if (isset($_POST['submit'])) {
         exit();
     }
 
-    // Save user with phone
+    // 1️⃣ Check if email or phone already exists
+    $check_query = "SELECT * FROM users WHERE email = '$email' OR phone = '$phone'";
+    $check_result = mysqli_query($conn, $check_query);
+
+    if (mysqli_num_rows($check_result) > 0) {
+        header("location: register.php?sms=Sorry the user already exists ");
+        exit();
+    }
+
+    // 2️⃣ Proceed to insert new user
     $sql = "INSERT INTO users (full_name, phone, email, password, role)
             VALUES ('$fullname', '$phone', '$email', '$password', 'applicant')";
 
@@ -26,6 +35,7 @@ if (isset($_POST['submit'])) {
     }
 }
 ?>
+
 
 
 <!DOCTYPE html>

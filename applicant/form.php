@@ -172,6 +172,9 @@ if ($name_row = $name_result->fetch_assoc()) {
                     <label>Jina kamili la muombaji</label>
                     <input type="text" name="name" required>
 
+                    <label>Barua Pepe</label>
+                    <input type="email" name="email" required>
+
                     <label>Jinsia</label>
                     <input type="radio" name="gender" value="male"> Me
                     <input type="radio" name="gender" value="female"> Ke

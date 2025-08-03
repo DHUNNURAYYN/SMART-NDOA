@@ -1,14 +1,14 @@
 <?php
-ob_start(); // Start output buffering to prevent TCPDF errors
+ob_start(); // Prevent TCPDF errors due to prior output
 
 require_once('../TCPDF-main/tcpdf.php');
 include '../connection.php';
 include '../session_check.php';
 
-// Get logged-in user ID
+// Get user
 $user_id = $_SESSION['user'];
 
-// 1. Check Attendance
+// Check attendance
 $total_sessions = 1;
 $sql = "SELECT COUNT(*) AS present_days FROM attendances WHERE user_id = ? AND status = 'Present'";
 $stmt = $conn->prepare($sql);
@@ -24,7 +24,7 @@ if ($attendance_percentage < 75) {
     exit;
 }
 
-// 2. Get User Info
+// Get name and date
 $sql2 = "SELECT full_name FROM users WHERE user_id = ?";
 $stmt2 = $conn->prepare($sql2);
 $stmt2->bind_param("i", $user_id);
@@ -34,13 +34,14 @@ $user = $result2->fetch_assoc();
 $full_name = strtoupper($user['full_name']);
 $completion_date = date("F j, Y");
 
-
-// === TCPDF START ===
-$pdf = new TCPDF('L', 'mm', 'A3', true, 'UTF-8', false); // A3 Landscape
+// === PDF Setup ===
+$pdf = new TCPDF('L', 'mm', 'A3', true, 'UTF-8', false);
 $pdf->SetCreator('SMART NDOA SYSTEM');
 $pdf->SetAuthor('Mufti Office Zanzibar');
 $pdf->SetTitle('Marriage Ethics Certificate');
-$pdf->SetMargins(20, 20, 20);
+
+// Remove margins for perfect border
+$pdf->SetMargins(0, 0, 0);
 $pdf->AddPage();
 
 // Draw Green Border (equal all sides)
@@ -48,12 +49,13 @@ $pdf->SetDrawColor(0, 128, 0); // Dark green
 $pdf->SetLineWidth(1);
 $pdf->Rect(10, 10, 400, 277); // Perfect within A3
 
-// Centered Logo
-$pdf->Image('../logo/logo.jpg', 185, 20, 50); // Centered horizontally on A3
+// === Logo (colorful logo image must be used) ===
+$pdf->Image('../logo/logo.jpg', 185, 25, 50); // Centered
 
-// Title
-$pdf->Ln(60);
+// === Title ===
+$pdf->Ln(65);
 $pdf->SetFont('times', 'B', 28);
+$pdf->SetTextColor(0, 0, 0);
 $pdf->Cell(0, 15, "THE GRAND MUFTI'S OFFICE OF ZANZIBAR", 0, 1, 'C');
 
 $pdf->SetFont('times', 'B', 26);
@@ -65,33 +67,37 @@ $pdf->SetLineWidth(0.6);
 $pdf->Line(70, $pdf->GetY(), 370, $pdf->GetY()); // Spaced in from edges
 $pdf->Ln(1);
 
-$pdf->Ln(10);
-
-// Certificate Body
+// === Body Content ===
 $pdf->SetFont('times', '', 20);
+$pdf->SetTextColor(0, 0, 0); // Black for normal text
+
 $html = "
 <div style=\"text-align: center;\">
     This is to certify that<br><br>
-    <span style=\"font-size: 28px;color:rgb(0,128,0);\"><b>$full_name</b></span><br><br>
-    has successfully completed the
-    <span style=\"font-size:24px;color:rgb(0,128,0);\"><b>Marriage Ethics Training</b></span><br><br>
-    conducted by the Office of the Mufti as part of the official marriage preparation program.<br><br>
-    Completion Date:  <span style=\"color:rgb(0,128,0);\"><b>$completion_date</b>
+    <span style=\"font-size: 30px;\"><b>$full_name</b></span><br><br>
+    has successfully completed the<br><br>
+    <span style=\"font-size:24px; color:rgb(0,128,0);\"><b>Marriage Ethics Training</b></span><br><br>
+    conducted by the Office of the Mufti as part of the official marriage preparation program.
 </div>";
 $pdf->writeHTML($html, true, false, true, false, '');
 
-// Signature - inside the border at bottom right
-$pdf->SetY(245); // 👈 Lower but still inside the border
-$pdf->Image('../images/signature.png', 300, 245, 50); // 👈 Adjust right & height safe within border
+$pdf->Ln(10);
 
-// Add signature text below the image
-$pdf->SetFont('times', '', 16);
-$pdf->SetY(265); // 👈 Slightly below the image but still inside border
+// Completion Date
+$pdf->SetFont('times', 'B', 18);
+$pdf->SetTextColor(0, 0, 0);
+$pdf->Cell(0, 10, "Completion Date: $completion_date", 0, 1, 'C');
+
+// === Signature Section (right bottom) ===
+$pdf->SetY(240);
+$pdf->Image('../images/signature.png', 330, 240, 50); // Inside border
+
+$pdf->SetY(262);
+$pdf->SetFont('times', '', 14);
 $pdf->Cell(0, 10, 'Signature - Office of the Mufti', 0, 0, 'R');
 
-
-// Clean and Output
-ob_end_clean(); // Clear output buffer
-$pdf->Output("Certificate_$full_name.pdf", 'D'); // Force download
+// === Output PDF ===
+ob_end_clean();
+$pdf->Output("Certificate_$full_name.pdf", 'D');
 exit;
 ?>

@@ -1,6 +1,7 @@
 <?php
 include '../connection.php';
 include '../session_check.php';
+include 'send_email.php'; // ✅ Added this line
 
 // Handle Delete
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_id'])) {
@@ -22,17 +23,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'], $_POST['for
     $stmt->execute();
     $stmt->close();
 
+    // Fetch student's email & name
+    $infoStmt = $conn->prepare("SELECT email, full_name, phone FROM application_form WHERE form_id = ?");
+    $infoStmt->bind_param("i", $formId);
+    $infoStmt->execute();
+    $infoStmt->bind_result($email, $full_name, $phone);
+    $infoStmt->fetch();
+    $infoStmt->close();
+
+    // Send email notification
+    sendNotification($email, $full_name, $status);
+
     // If approved, update user role to 'student'
     if ($status === 'approved') {
-        // Get phone number from the application form
-        $getPhoneStmt = $conn->prepare("SELECT phone FROM application_form WHERE form_id = ?");
-        $getPhoneStmt->bind_param("i", $formId);
-        $getPhoneStmt->execute();
-        $getPhoneStmt->bind_result($phone);
-        $getPhoneStmt->fetch();
-        $getPhoneStmt->close();
-
-        // Now get user_id from users table using the phone number
         $getUserStmt = $conn->prepare("SELECT user_id FROM users WHERE phone = ?");
         $getUserStmt->bind_param("s", $phone);
         $getUserStmt->execute();
@@ -40,7 +43,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'], $_POST['for
         $getUserStmt->fetch();
         $getUserStmt->close();
 
-        // If user_id is found, update role
         if (!empty($userId)) {
             $updateRoleStmt = $conn->prepare("UPDATE users SET role = 'student' WHERE user_id = ?");
             $updateRoleStmt->bind_param("i", $userId);
@@ -50,6 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'], $_POST['for
     }
 }
 ?>
+
 
 
 <!DOCTYPE html>
