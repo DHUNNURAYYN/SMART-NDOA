@@ -86,25 +86,27 @@ if (isset($_SESSION['role']) && $_SESSION['role'] == 'admin') {
     </div>
 
     <ul class="sidebar-menu">
-        <li><a href="lecturer_dashboard.php"><i class="fas fa-tachometer-alt"></i> Dashboard </a></li>
-        <li><a href="answer_questions.php"><i class="fas fa-check-square"></i> Answer Questions</a></li>
-        <li><a href="manage_books.php"><i class="fas fa-book"></i> Manage Books</a></li>
+     <li><a href="/lecturer/manage_books.php"><i class="fas fa-book"></i> Manage Books</a></li>
 
-          <li>
-        <a href="manage_questions.php">
-            <i class="fas fa-question-circle"></i> Manage Questions
-            <?php if ($question_count > 0): ?>
-                <span style="background: red; color: white; font-size: 12px; padding: 2px 8px; border-radius: 12px; margin-left: 6px;">
-                    <?= $question_count ?>
-                </span>
-            <?php endif; ?>
-        </a>
-</li>
+<li class="has-submenu">
+    <a href="/lecturer/manage_questions.php" onclick="toggleSubmenu(event)">
+        <i class="fas fa-question-circle"></i> Manage Questions
+        <?php if ($question_count > 0): ?>
+            <span style="background: red; color: white; font-size: 12px; padding: 2px 8px; border-radius: 12px; margin-left: 6px;">
+                <?= $question_count ?>
+            </span>
+        <?php endif; ?>
+        <i class="fas fa-caret-down" style="float: right; margin-top: 4px;"></i>
+    </a>
+    <ul class="submenu">
+        <li><a href="/lecturer/manage_questions.php"><i class="fas fa-tasks"></i> Manage Questions</a></li>
+        <li><a href="/lecturer/answer_questions.php"><i class="fas fa-check-square"></i> Answer Questions</a></li>
+    </ul>
+
 
         </li>
 
-        <li><a href="view_news.php"><i class="fas fa-check-square"></i> View Posted News</a></li>
-        <li><a href="manage_attendances.php"><i class="fas fa-check-square"></i> Mark Attendance</a></li>
+        <li><a href="/lecturer/manage_attendances.php"><i class="fas fa-check-square"></i> Mark Attendance</a></li>
         <li><a href="../admin/view_attendance_records.php"><i class="fas fa-check-square"></i> View Attendance Record</a></li>
     </ul>
 

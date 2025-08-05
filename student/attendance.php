@@ -1,13 +1,19 @@
 <?php
-
-
 include '../connection.php';
 include '../session_check.php';
 
-
 $user_id = $_SESSION['user'];
 
-
+// Get student name
+$name = "Student";
+$sql = "SELECT full_name FROM users WHERE user_id = ?";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("i", $user_id);
+$stmt->execute();
+$result = $stmt->get_result();
+if ($row = $result->fetch_assoc()) {
+    $name = $row['full_name'];
+}
 
 // Total sessions = 10 weeks × 2 days (Sat & Sun) = 20
 $total_sessions = 1;
@@ -27,65 +33,103 @@ $attendance_percentage = ($present_days / $total_sessions) * 100;
 // Determine eligibility
 $eligibility = '';
 if ($attendance_percentage >= 75) {
-    $eligibility = "<span style='color: green;'> Eligible for Certificate</span>";
+    $eligibility = "<span style='color: green; font-weight:bold;'> Eligible for Certificate</span>";
 } elseif ($attendance_percentage < 70) {
-    $eligibility = "<span style='color: red;'> Not Eligible for Certificate</span>";
+    $eligibility = "<span style='color: red; font-weight:bold;'> Not Eligible for Certificate</span>";
 } else {
-    $eligibility = "<span style='color: orange;'> Borderline</span>";
+    $eligibility = "<span style='color: orange; font-weight:bold;'> Borderline</span>";
 }
 ?>
 
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Attendance Summary</title>
+    <meta charset="UTF-8">
+    <title>Attendance Report - Smart Ndoa </title>
+    <link rel="stylesheet" href="student_dashboard.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f0f2f5;
+            margin: 0;
+        }
+
         .summary {
-            width: 60%;
+            width: 70%;
             margin: 40px auto;
-            padding: 20px;
-            background-color: #f5f5f5;
+            padding: 25px;
+            background-color: #ffffff;
             border-radius: 12px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            font-family: sans-serif;
+            box-shadow: 0 6px 12px rgba(0,0,0,0.1);
             text-align: center;
         }
-        .summary h2 { color: #333; }
-        .summary p { font-size: 18px; }
+
+        .summary h2 {
+            color: #0b3954;
+            margin-bottom: 20px;
+        }
+
+        .summary p {
+            font-size: 18px;
+            margin: 10px 0;
+        }
+
         .btn-download {
             display: inline-block;
-            padding: 10px 25px;
-            margin-top: 20px;
+            padding: 12px 28px;
+            margin-top: 25px;
             background-color: #28a745;
             color: white;
+            font-size: 16px;
             font-weight: bold;
             text-decoration: none;
-            border-radius: 8px;
-            transition: background-color 0.3s ease;
+            border-radius: 6px;
+            transition: 0.3s;
         }
+
         .btn-download:hover {
-            background-color: #218838;
+            background-color: #1e7e34;
         }
+
         .waiting-message {
             color: #ff6600;
             font-weight: bold;
-            margin-top: 20px;
+            margin-top: 25px;
+        }
+
+        header h1 {
+            font-size: 24px;
+            margin: 20px;
         }
     </style>
 </head>
 <body>
-    <div class="summary">
-        <h2>📋 Attendance Report</h2>
-        <p><strong>Total Sessions:</strong> 20 (10 Weeks × 2 Days)</p>
-        <p><strong>Days Attended:</strong> <?= $present_days ?></p>
-        <p><strong>Attendance Percentage:</strong> <?= round($attendance_percentage, 2) ?>%</p>
-        <p><strong>Status:</strong> <?= $eligibility ?></p>
+<div class="dashboard-container">
 
-        <?php if ($attendance_percentage >= 75): ?>
-            <a href="download_certificate.php" class="btn-download" target="_blank">⬇️ Download Certificate</a>
-        <?php else: ?>
-            <p class="waiting-message">Please wait for another semester to become eligible for the certificate.</p>
-        <?php endif; ?>
+    <!-- Sidebar -->
+    <?php include "../sidebar.php"; ?>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <header>
+            <h1>Welcome, <b><?= htmlspecialchars($name) ?></b> </h1>
+        </header>
+
+        <div class="summary">
+            <h2> Attendance Report</h2>
+            <p><strong>Total Sessions:</strong> 20 (10 Weeks × 2 Days)</p>
+            <p><strong>Days Attended:</strong> <?= $present_days ?></p>
+            <p><strong>Attendance Percentage:</strong> <?= round($attendance_percentage, 2) ?>%</p>
+            <p><strong>Status:</strong> <?= $eligibility ?></p>
+
+            <?php if ($attendance_percentage >= 75): ?>
+                <a href="download_certificate.php" class="btn-download" target="_blank">⬇ Download Certificate</a>
+            <?php else: ?>
+                <p class="waiting-message">Please wait for another semester to become eligible for the certificate.</p>
+            <?php endif; ?>
+        </div>
     </div>
+</div>
 </body>
 </html>

@@ -79,18 +79,18 @@ if (isset($_GET['delete'])) {
             min-height: 100vh;
         }
 
-        .delete-btn {
-            background-color: #cc0000;
-            color: white;
-            padding: 6px 12px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-        }
+      .delete-btn {
+    background-color: #cc0000;
+    color: white;
+    padding: 6px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+.delete-btn:hover {
+    background-color: #990000;
+}
 
-        .delete-btn:hover {
-            background-color: #990000;
-        }
     </style>
 </head>
 <body>
@@ -137,9 +137,13 @@ if (isset($_GET['delete'])) {
                         <td><?php echo $row['date_posted']; ?></td>
                         <td class="content-cell"><?php echo htmlspecialchars($row['content']); ?></td>
                         <td>
-                            <a href="?delete=<?php echo $row['news_id']; ?>" onclick="return confirm('Are you sure you want to delete this news?');">
-                                <button class="delete-btn">Delete</button>
+                            <a href="?delete=<?php echo $row['news_id']; ?>" 
+                            onclick="return confirm('Are you sure you want to delete this news?');" 
+                            title="Delete" 
+                            style="color: #e74c3c; font-size: 18px; display:inline-block;">
+                                <i class="fas fa-trash-alt"></i>
                             </a>
+
                         </td>
                     </tr>
                     <?php

@@ -180,10 +180,11 @@ img {
 
                 </tr>
             </table>
-
             <div class="buttons">
                 <a class="edit-btn" href="edit_application.php?id=<?= $form['form_id'] ?>">Update</a>
+                <a class="approve-btn" href="generate_application_pdf.php?id=<?= $form['form_id'] ?>" target="_blank">Approve & Generate PDF</a>
             </div>
+          
         </div>
     </div>
 </div>

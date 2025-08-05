@@ -12,7 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_id'])) {
     $deleteStmt->close();
 }
 
-// Handle Approve/Reject
+// Handle Approve
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'], $_POST['form_id'])) {
     $formId = intval($_POST['form_id']);
     $status = $_POST['action'] === 'approve' ? 'approved' : 'rejected';
@@ -53,15 +53,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'], $_POST['for
 }
 ?>
 
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" />
     <title>Manage Applications</title>
-    <link rel="stylesheet" href="../dashboard.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="../dashboard.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
     <style>
         .applications {
             margin-top: 20px;
@@ -75,7 +73,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'], $_POST['for
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
-            padding: 20px;
+        }
+        thead {
+            background: #228B22;
         }
         th, td {
             padding: 12px;
@@ -83,47 +83,54 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'], $_POST['for
             border-bottom: 1px solid #ddd;
         }
         th {
-            background: #228B22;
             color: white;
         }
         tr:hover {
             background: #f1f1f1;
         }
-        .btn-approve, .btn-reject {
-            padding: 6px 12px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            color: white;
-            font-size: 14px;
-        }
-        .btn-approve {
-            background-color: #27ae60;
-        }
-        .btn-reject {
-            background-color: #c0392b;
-        }
         .status-text {
             font-weight: bold;
             text-transform: capitalize;
         }
-        footer {
-            text-align: center;
-            padding: 10px;
-            margin-top: 30px;
-            color: #777;
-            font-size: 14px;
+
+        /* Icon action styles like Manage Users */
+        .icon-action {
+            font-size: 18px;
+            margin-right: 10px;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .icon-approve {
+            color: #27ae60;
+        }
+        .icon-view {
+            color: #2980b9;
+        }
+        .icon-delete {
+            color: #e74c3c;
+        }
+        .icon-approve:hover,
+        .icon-view:hover,
+        .icon-delete:hover {
+            opacity: 0.7;
+        }
+
+        form.inline-form {
+            display: inline;
+        }
+        button.icon-button {
+            background: none;
+            border: none;
+            padding: 0;
+            cursor: pointer;
         }
     </style>
 </head>
 <body>
 
 <div class="dashboard-container">
-    
-    <!-- Sidebar -->
     <?php include '../sidebar.php'; ?>
 
-    <!-- Main Content -->
     <div class="main-content">
         <header>
             <h1>Manage Applications</h1>
@@ -145,52 +152,46 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'], $_POST['for
                 </thead>
                 <tbody>
                 <?php
-                $sql = "SELECT * FROM application_form";
+                $sql = "SELECT * FROM application_form ORDER BY form_id DESC";
                 $result = $conn->query($sql);
+                $sn = 1;
 
-                if ($result->num_rows > 0):
+                if ($result && $result->num_rows > 0):
                     while($row = $result->fetch_assoc()):
                 ?>
                     <tr>
-                        <td><?= htmlspecialchars($row['form_id']) ?></td>
+                        <td><?= $sn++ ?></td>
                         <td><?= htmlspecialchars($row['full_name']) ?></td>
                         <td><?= htmlspecialchars($row['phone']) ?></td>
                         <td><?= htmlspecialchars($row['shehia']) ?></td>
                         <td><?= htmlspecialchars($row['district']) ?></td>
                         <td><?= htmlspecialchars($row['employed']) ?></td>
                         <td class="status-text"><?= htmlspecialchars($row['status']) ?></td>
-
                         <td>
                             <?php if ($row['status'] === 'pending'): ?>
-                                <form method="post" style="display:inline;">
-                                    <input type="hidden" name="form_id" value="<?= $row['form_id'] ?>">
-                                    <input type="hidden" name="action" value="approve">
-                                    <button type="submit" class="btn-approve"><i class="fas fa-check"></i> Approve</button>
+                                <form method="post" class="inline-form" style="margin-right:10px;">
+                                    <input type="hidden" name="form_id" value="<?= $row['form_id'] ?>" />
+                                    <input type="hidden" name="action" value="approve" />
+                                    <button type="submit" class="icon-action icon-approve icon-button" title="Approve">
+                                        <i class="fas fa-check"></i>
+                                    </button>
                                 </form>
                             <?php else: ?>
-                                <span style="color:gray;">Approved</span>
+                                <span style="color:gray; font-weight:bold;">Approved</span>
                             <?php endif; ?>
 
-                          <a href="view_application.php?id=<?= $row['form_id'] ?>" 
-                        class="btn-view" 
-                        style="background-color:#2980b9; color:#fff; padding:6px 12px; border:none; border-radius:5px; text-decoration:none; margin-left:5px; display:inline-block; font-size:14px;">
-                            <i class="fas fa-eye"></i> View
-                        </a>
+                            <a href="view_application.php?id=<?= $row['form_id'] ?>" 
+                               title="View" 
+                               class="icon-action icon-view" target="_blank">
+                                <i class="fas fa-eye"></i>
+                            </a>
 
-                        <form method="post" 
-                            onsubmit="return confirm('Are you sure you want to delete this application?');" 
-                            style="display:inline;">
-                            <input type="hidden" name="delete_id" value="<?= $row['form_id'] ?>">
-                            <button type="submit" 
-                                    name="delete" 
-                                    class="btn-reject" 
-                                    style="margin-left:5px; background-color:#c0392b; color:white; padding:6px 12px; border:none; border-radius:5px; font-size:14px;">
-                                <i class="fas fa-trash"></i> Delete
-                            </button>
-                        </form>
-
-
-
+                            <form method="post" onsubmit="return confirm('Are you sure you want to delete this application?');" class="inline-form">
+                                <input type="hidden" name="delete_id" value="<?= $row['form_id'] ?>" />
+                                <button type="submit" name="delete" title="Delete" class="icon-action icon-delete icon-button">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                            </form>
                         </td>
                     </tr>
                 <?php
@@ -207,3 +208,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'], $_POST['for
 
 </body>
 </html>
+<?php $conn->close(); ?>

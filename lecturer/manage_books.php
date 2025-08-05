@@ -44,95 +44,115 @@ if (isset($_GET['delete'])) {
         th, td {
             padding: 12px;
             border: 1px solid #ddd;
-        }
-        .btn-edit, .btn-delete, .btn-download {
-            padding: 4px 8px;
-            border-radius: 4px;
-            text-decoration: none;
-            margin-right: 5px;
-        }
-        .btn-download {
-            background-color: #28a745;
-            color: white;
-        }
-        .btn-edit {
-            background-color: #ffc107;
-            color: black;
-        }
-        .btn-delete {
-            background-color: #dc3545;
-            color: white;
+            text-align: left;
         }
         thead {
             background-color: #228B22;
         }
+
+        .icon-action {
+            font-size: 18px;
+            margin-right: 10px;
+        }
+
+        .icon-download {
+            color: #28a745;
+        }
+
+        .icon-delete {
+            color: #e74c3c;
+        }
+
+
         .add-book {
             display: inline-block;
-            background-color: #007bff;
-            color: white;
-            padding: 8px 12px;
+            color: #007bff;
+            font-size: 50px;
+            margin-top: 10px;
             text-decoration: none;
-            border-radius: 5px;
-            margin-bottom: 10px;
+        }
+
+        .add-book:hover {
+            opacity: 0.8;
+        }
+        .add-book-container{
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+    
+            border-radius: 50%;
+            width: 100px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
         }
     </style>
 </head>
 <body>
-    <div class="dashboard-container">
-        <div class="sidebar">
-            <!-- Sidebar -->
-            <?php include '../sidebar.php'; ?>
-        </div>
+<div class="dashboard-container">
+    <div class="sidebar">
+        <?php include '../sidebar.php'; ?>
+    </div>
 
-        <div class="main-content">
-            <header>
-                <h1>Manage Books</h1>
-            </header>
-            <div class="books">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>S/N</th>
-                            <th>Title</th>
-                            <th>Author</th>
-                            <th>Category</th>
-                            <th>Uploaded By</th>
-                            <th>Uploaded On</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php
-                        $result = mysqli_query($conn, "
-                            SELECT books.*, users.full_name 
-                            FROM books 
-                            JOIN users ON books.uploaded_by = users.user_id 
-                            ORDER BY uploaded_on DESC
-                        ");
-                        $serial = 0;
-                        while ($row = mysqli_fetch_assoc($result)) {
-                            $serial++;
-                            echo "<tr>
-                                <td>$serial</td>
-                                <td>{$row['title']}</td>
-                                <td>{$row['author']}</td>
-                                <td>{$row['category']}</td>
-                                <td>{$row['full_name']}</td>
-                                <td>{$row['uploaded_on']}</td>
-                                <td>
-                                    <a href='{$row['file_path']}' class='btn-download' download><i class='fas fa-download'></i> Download</a>
-                
-                                    <a href='?delete={$row['book_id']}' class='btn-delete' onclick='return confirm(\"Are you sure you want to delete this book?\")'><i class='fas fa-trash'></i> Delete</a>
-                                </td>
-                            </tr>";
-                        }
-                        ?>
-                    </tbody>
-                </table>
-                                <a href="add_books.php" class="add-book"><i class="fas fa-plus"></i> Add New Book</a>
+    <div class="main-content">
+        <header>
+            <h1>Manage Books</h1>
+        </header>
+        <div class="books">
+            <table>
+                <thead>
+                    <tr>
+                        <th>S/N</th>
+                        <th>Title</th>
+                        <th>Author</th>
+                        <th>Category</th>
+                        <th>Uploaded By</th>
+                        <th>Uploaded On</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php
+                    $result = mysqli_query($conn, "
+                        SELECT books.*, users.full_name 
+                        FROM books 
+                        JOIN users ON books.uploaded_by = users.user_id 
+                        ORDER BY uploaded_on DESC
+                    ");
+                    $serial = 0;
+                    while ($row = mysqli_fetch_assoc($result)) {
+                        $serial++;
+                        echo "<tr>
+                            <td>$serial</td>
+                            <td>{$row['title']}</td>
+                            <td>{$row['author']}</td>
+                            <td>{$row['category']}</td>
+                            <td>{$row['full_name']}</td>
+                            <td>{$row['uploaded_on']}</td>
+                            <td>
+                                <a href='{$row['file_path']}' title='Download' class='icon-action icon-download' download>
+                                    <i class='fas fa-download'></i>
+                                </a>
+                                <a href='?delete={$row['book_id']}' title='Delete' class='icon-action icon-delete' onclick='return confirm(\"Are you sure you want to delete this book?\")'>
+                                    <i class='fas fa-trash-alt'></i>
+                                </a>
+                            </td>
+                        </tr>";
+                    }
+                    ?>
+                </tbody>
+            </table>
 
-            </div>
+            <!-- Add Book Icon -->
+             <div class="add-book-container">
+            <a href="add_books.php" class="add-book" title="Add New Book">
+                <i class="fas fa-plus-circle"></i>
+            </a>
+            </div>  
         </div>
     </div>
+</div>
 </body>
 </html>

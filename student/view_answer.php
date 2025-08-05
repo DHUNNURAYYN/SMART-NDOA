@@ -106,6 +106,7 @@ $result = $stmt->get_result();
                 </div>
             <?php 
                 $i++;
+               
             endwhile; 
             ?>
         </div>

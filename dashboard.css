@@ -151,3 +151,17 @@ header {
     font-weight: bold;
     color: #205B40;
 }
+
+.submenu {
+    display: none;
+    list-style: none;
+    padding-left: 20px;
+}
+
+.has-submenu.active>.submenu {
+    display: block;
+}
+
+.has-submenu>a {
+    cursor: pointer;
+}
