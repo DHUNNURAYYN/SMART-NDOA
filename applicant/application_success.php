@@ -18,7 +18,7 @@ if ($row = $result->fetch_assoc()) {
 <html lang="sw">
 <head>
     <meta charset="UTF-8">
-    <title>Maombi Yamepokelewa ✅</title>
+    <title>Maombi Yamepokelewa</title>
     <link rel="stylesheet" href="../student/student_dashboard.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
@@ -59,7 +59,6 @@ if ($row = $result->fetch_assoc()) {
             border-radius: 6px;
             font-size: 16px;
             text-decoration: none;
-            
         }
 
         .back-btn:hover {
@@ -75,13 +74,10 @@ if ($row = $result->fetch_assoc()) {
 
     <!-- Main Content -->
     <div class="main-content">
-        
-
-        <!-- Success Message Box -->
         <div class="info-box">
             <i class="fas fa-check-circle icon-check"></i>
             <h1> Maombi Yamepokelewa</h1>
-            <p>Hongera ndugu <b><?= htmlspecialchars($name) ?></b> Umefanikiwa kujaza fomu ya maombi ya kujiunga na mafunzo ya maadili ya ndoa.</p>
+            <p>Hongera ndugu <b><?= htmlspecialchars($name) ?></b>, umefanikiwa kujaza fomu ya maombi ya kujiunga na mafunzo ya maadili ya ndoa.</p>
             <p>Subiri ujumbe kupitia <b>barua pepe yako (Gmail)</b> mara tu utakapokubaliwa rasmi.</p>
 
             <hr style="margin: 30px 0; border: 1px dashed #ccc;">

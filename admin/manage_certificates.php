@@ -1,6 +1,29 @@
-<?php
+<?php 
 include '../connection.php';
 include '../session_check.php';
+
+// ✅ Create the visibility table if not exists
+$conn->query("CREATE TABLE IF NOT EXISTS attendance_visibility (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    is_visible TINYINT(1) DEFAULT 0
+)");
+
+// ✅ Insert a default row if empty
+$conn->query("INSERT IGNORE INTO attendance_visibility (id, is_visible) VALUES (1, 0)");
+
+// ✅ Handle toggle request
+if (isset($_POST['toggle_visibility'])) {
+    $new_visibility = $_POST['current'] == '1' ? 0 : 1;
+    $conn->query("UPDATE attendance_visibility SET is_visible = $new_visibility WHERE id = 1");
+    header("Location: " . $_SERVER['PHP_SELF']);
+    exit;
+}
+
+// ✅ Fetch current visibility
+$visibility_result = $conn->query("SELECT is_visible FROM attendance_visibility WHERE id = 1");
+$visibility = ($visibility_result && $visibility_result->num_rows > 0) 
+    ? $visibility_result->fetch_assoc()['is_visible'] 
+    : 0;
 ?>
 
 <!DOCTYPE html>
@@ -10,7 +33,6 @@ include '../session_check.php';
     <title>Manage Certificates</title>
     <link rel="stylesheet" href="../dashboard.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
     <style>
         .users {
             margin-top: 20px;
@@ -45,17 +67,21 @@ include '../session_check.php';
             margin-right: 10px;
         }
 
-        .icon-view {
-            color: #2980b9;
+        .icon-view { color: #2980b9; }
+        .icon-download { color: #27ae60; }
+        .not-eligible { color: #999; font-style: italic; }
+
+        .toggle-btn {
+            padding: 10px 20px;
+            background-color: #b22222;;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
         }
 
-        .icon-download {
-            color: #27ae60;
-        }
-
-        .not-eligible {
-            color: #999;
-            font-style: italic;
+        .toggle-btn.red {
+            background-color: #228B22;
         }
     </style>
 </head>
@@ -65,11 +91,21 @@ include '../session_check.php';
     <?php include '../sidebar.php'; ?>
 
     <div class="main-content">
-        <header>
-            <h1>Manage Certificates</h1>
-        </header>
+        <header><h1>Manage Certificates</h1></header>
 
         <div class="users">
+            <!-- ✅ Toggle Button -->
+            <form method="POST" style="margin-bottom: 20px;">
+                <input type="hidden" name="current" value="<?= $visibility ?>">
+                <button type="submit" name="toggle_visibility" class="toggle-btn <?= $visibility ? 'red' : '' ?>">
+                   <?= $visibility 
+                        ? '<i class="fas fa-check-circle" style="color:green;"></i> Allow Certificate' 
+                        : '<i class="fas fa-times-circle" style="color:red;"></i> Block Certificate' 
+                    ?>
+
+                </button>
+            </form>
+
             <table>
                 <thead>
                     <tr>
@@ -83,10 +119,15 @@ include '../session_check.php';
                 </thead>
                 <tbody>
                     <?php
-                    $sql = "SELECT u.user_id, u.full_name, 
-                                   COUNT(a.status) AS present_days
+                    $session_result = $conn->query("SELECT COUNT(DISTINCT date) AS total FROM attendances");
+                    $total_sessions = ($session_result && $session_result->num_rows > 0) 
+                        ? $session_result->fetch_assoc()['total'] 
+                        : 1;
+
+                    $sql = "SELECT u.user_id, u.full_name, COUNT(a.status) AS present_days
                             FROM users u
-                            LEFT JOIN attendances a ON u.user_id = a.user_id AND a.status = 'Present'
+                            LEFT JOIN attendances a 
+                            ON u.user_id = a.user_id AND a.status = 'Present'
                             WHERE u.role = 'student'
                             GROUP BY u.user_id, u.full_name";
 
@@ -97,11 +138,12 @@ include '../session_check.php';
                         $user_id = $row['user_id'];
                         $name = $row['full_name'];
                         $present = $row['present_days'];
-                        $total_sessions = 1; // Update this later
-                        $percentage = ($present / $total_sessions) * 100;
+                        $percentage = ($total_sessions > 0) ? ($present / $total_sessions) * 100 : 0;
                         $eligible = $percentage >= 75;
 
-                        $status = $eligible ? '<span style="color:green;">Eligible</span>' : '<span style="color:red;">Not Eligible</span>';
+                        $status = $eligible 
+                            ? '<span style="color:green;">Eligible</span>' 
+                            : '<span style="color:red;">Not Eligible</span>';
 
                         $action = $eligible
                             ? "
@@ -132,6 +174,5 @@ include '../session_check.php';
         </div>
     </div>
 </div>
-
 </body>
 </html>

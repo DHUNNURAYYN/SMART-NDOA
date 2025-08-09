@@ -115,8 +115,15 @@ if ($attendance_percentage >= 75) {
         <header>
             <h1>Welcome, <b><?= htmlspecialchars($name) ?></b> </h1>
         </header>
+            <?php 
+        $query = "SELECT is_visible FROM attendance_visibility WHERE id = 1;";
+        $result = $conn->query($query);
 
-        <div class="summary">
+        if ($result && $row = $result->fetch_assoc()) {
+            if ($row['is_visible'] == 0) {
+                echo "samahani matokeo hayajatolewa"; // Not visible yet
+            } else { ?>
+                <div class="summary">
             <h2> Attendance Report</h2>
             <p><strong>Total Sessions:</strong> 20 (10 Weeks × 2 Days)</p>
             <p><strong>Days Attended:</strong> <?= $present_days ?></p>
@@ -129,7 +136,14 @@ if ($attendance_percentage >= 75) {
                 <p class="waiting-message">Please wait for another semester to become eligible for the certificate.</p>
             <?php endif; ?>
         </div>
+           <?php }
+        } else {
+            echo "KUnatatizo katika kuchukua taarifa."; // Error fetching data
+        }
+
+    ?>
     </div>
+
 </div>
 </body>
 </html>

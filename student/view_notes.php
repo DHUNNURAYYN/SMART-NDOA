@@ -23,6 +23,25 @@ if ($row = $result->fetch_assoc()) {
     <title>Student Dashboard - Smart Ndoa 🎓</title>
     <link rel="stylesheet" href="student_dashboard.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+    .assessment-btn {
+    display: inline-block;
+    padding: 12px 24px;
+    background-color: #007bff;
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    transition: background-color 0.3s ease;
+}
+
+.assessment-btn:hover {
+    background-color: #0056b3;
+}
+
+</style>
 </head>
 <body>
     <div class="dashboard-container">
@@ -33,13 +52,13 @@ if ($row = $result->fetch_assoc()) {
         <!-- Main Content -->
         <div class="main-content">
             <header>
-                <h1>Welcome, <b><?= htmlspecialchars($name) ?></b> 🎓</h1>
+                <h1>Welcome, <b><?= htmlspecialchars($name) ?></b> </h1>
             </header>
 
             <!-- Notes Section -->
             <div class="section" id="notes">
                 <div class="info-box">
-                    <h3>📚 Course Notes</h3>
+                    <h3> Course Notes</h3>
                     <table>
                         <thead>
                             <tr>
@@ -74,6 +93,10 @@ if ($row = $result->fetch_assoc()) {
                     </table>
                 </div>
             </div>
+        <div style="margin-top: 30px;">
+            <a href="receive_assessment.php" class="assessment-btn"> Take Assessment</a>
+        </div>
+
 
         </div> <!-- End of main-content -->
     </div> <!-- End of dashboard-container -->

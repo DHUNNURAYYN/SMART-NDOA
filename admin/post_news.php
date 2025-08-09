@@ -130,6 +130,13 @@ button:hover {
         </div>
     </div>
 </div>
+<script>
+function toggleSubmenu(e) {
+    e.preventDefault();
+    const parentLi = e.currentTarget.parentElement;
+    parentLi.classList.toggle('open');
+}
+</script>
 
 
 </body>

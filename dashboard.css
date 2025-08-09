@@ -153,15 +153,30 @@ header {
 }
 
 .submenu {
-    display: none;
     list-style: none;
     padding-left: 20px;
+    margin-top: 5px;
+    display: none;
+    /* hidden by default */
 }
 
-.has-submenu.active>.submenu {
+li:hover>.submenu {
     display: block;
+    /* show submenu on hover of parent li */
 }
 
-.has-submenu>a {
-    cursor: pointer;
+.submenu li a {
+    font-weight: 500;
+    color: #555;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 0;
+}
+
+.submenu-arrow {
+    float: right;
+    font-size: 0.8em;
+    margin-left: auto;
 }

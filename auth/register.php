@@ -2,30 +2,32 @@
 include('../connection.php');
 
 if (isset($_POST['submit'])) {
-    $fullname = $_POST['fullname'];
-    $phone = $_POST['phone'];
-    $email = $_POST['email'];
-    $password = $_POST['password'];
-    $confirm_password = $_POST['confirm_password'];
+    $fullname = trim($_POST['fullname']);
+    $phone = trim($_POST['phone']);
+    $email = trim($_POST['email']);
+    $password_plain = trim($_POST['password']);
+    $confirm_password = trim($_POST['confirm_password']);
 
-    if ($password !== $confirm_password) {
+    if ($password_plain !== $confirm_password) {
         header("location: register.php?sms=Passwords do not match");
         exit();
     }
 
-    // 1️⃣ Check if email or phone already exists
+    // Check if user exists
     $check_query = "SELECT * FROM users WHERE email = '$email' OR phone = '$phone'";
     $check_result = mysqli_query($conn, $check_query);
 
     if (mysqli_num_rows($check_result) > 0) {
-        header("location: register.php?sms=Sorry the user already exists ");
+        header("location: register.php?sms=Sorry the user already exists");
         exit();
     }
 
-    // 2️⃣ Proceed to insert new user
-    $sql = "INSERT INTO users (full_name, phone, email, password, role)
-            VALUES ('$fullname', '$phone', '$email', '$password', 'applicant')";
+    // Hash the password
+    $hashed_password = password_hash($password_plain, PASSWORD_DEFAULT);
 
+    // Insert into database
+    $sql = "INSERT INTO users (full_name, phone, email, password, role)
+            VALUES ('$fullname', '$phone', '$email', '$hashed_password', 'applicant')";
     $result = mysqli_query($conn, $sql);
 
     if ($result) {
@@ -35,8 +37,6 @@ if (isset($_POST['submit'])) {
     }
 }
 ?>
-
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -53,23 +53,23 @@ if (isset($_POST['submit'])) {
             var password = document.forms["registerForm"]["password"].value;
             var confirm_password = document.forms["registerForm"]["confirm_password"].value;
             var terms = document.forms["registerForm"]["terms"].checked;
+            var phone = document.forms["registerForm"]["phone"].value;
 
             if (fullname.trim() === "") {
                 alert("Full Name is required.");
                 return false;
             }
-            var phone = document.forms["registerForm"]["phone"].value;
+
             if (phone.trim() === "") {
                 alert("Phone number is required.");
                 return false;
             }
+
             var phonePattern = /^[0-9]{7,15}$/;
             if (!phonePattern.test(phone)) {
                 alert("Enter a valid phone number (7 to 15 digits).");
                 return false;
             }
-
-
 
             if (email.trim() === "") {
                 alert("Email is required.");
@@ -114,11 +114,13 @@ if (isset($_POST['submit'])) {
 
 <body>
     <div class="register-container">
-        <?php if(isset($_GET["sms"])) { ?>
-            <p style="color:red; text-align:center">
-                <?php echo $_GET["sms"]; ?>
-            </p>
-        <?php } ?>
+        <?php 
+        // Replace message with alert if set
+        if(isset($_GET["sms"])) {
+            $msg = htmlspecialchars($_GET["sms"], ENT_QUOTES, 'UTF-8');
+            echo "<script>alert('$msg');</script>";
+        }
+        ?>
 
         <div class="user-logo">
             <img src="../Logo/logo.JPG" alt="Mufti Logo">
@@ -131,16 +133,14 @@ if (isset($_POST['submit'])) {
             </div>
 
             <div class="input-group">
-            <i class="fas fa-phone"></i>
-            <input type="text" name="phone" placeholder="Phone Number" required>
+                <i class="fas fa-phone"></i>
+                <input type="text" name="phone" placeholder="Phone Number" required>
             </div>
 
             <div class="input-group">
                 <i class="fas fa-envelope"></i>
                 <input type="email" name="email" placeholder="Email ID" required>
             </div>
-
-            
 
             <div class="input-group">
                 <i class="fas fa-lock"></i>

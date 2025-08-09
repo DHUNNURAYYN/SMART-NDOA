@@ -1,3 +1,4 @@
+
 <?php
 include 'connection.php'; // Make sure this is correct
 
@@ -358,7 +359,7 @@ body {
                                 na kutoa miongozo ya dini kwa mujibu wa mazingira ya wakati huo. Kwa upande wa Serikali, Mahakama ya Kadhi Mkuu ilihusika katika masuala ya kidini.</p>
                             <p> وَاعْتَصِمُوا بِحَبْلِ اللَّهِ جَمِيعًا وَلَا تَفَرَّقُوا ۚ وَاذْكُرُوا نِعْمَتَ اللَّهِ عَلَيْكُمْ إِذْ كُنْتُمْ أَعْدَاءً فَأَلَّفَ بَيْنَ قُلُوبِكُمْ...</p>
 
-                            <a href="auth/login.php" class="join-btn">Comment</a>
+                            <a href="ask_question.php" class="join-btn">Uliza swali</a>
                         </div>
                     </section>
                 </div>

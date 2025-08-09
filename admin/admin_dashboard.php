@@ -16,17 +16,26 @@ if ($name_row = $name_result->fetch_assoc()) {
     $name = $name_row['full_name'];
 }
 
-// Count total users
-$userQuery = $conn->query("SELECT COUNT(*) AS total_users FROM users");
-$userData = $userQuery->fetch_assoc();
+// Count total students
+$studentQuery = $conn->query("SELECT COUNT(*) AS total_students FROM users WHERE role = 'student'");
+$studentData = $studentQuery->fetch_assoc();
+
+// Count total lecturers
+$lecturerQuery = $conn->query("SELECT COUNT(*) AS total_lecturers FROM users WHERE role = 'lecturer'");
+$lecturerData = $lecturerQuery->fetch_assoc();
+
+// Count total admins
+$adminQuery = $conn->query("SELECT COUNT(*) AS total_admins FROM users WHERE role = 'admin'");
+$adminData = $adminQuery->fetch_assoc();
 
 // Count total applications
 $appQuery = $conn->query("SELECT COUNT(*) AS total_apps FROM application_form");
 $appData = $appQuery->fetch_assoc();
 
-// Count total books
+// Count total questions
 $bookQuery = $conn->query("SELECT COUNT(*) AS total_questions FROM questions");
 $bookData = $bookQuery->fetch_assoc();
+
 // Count total news posts
 $newsQuery = $conn->query("SELECT COUNT(*) AS total_news FROM news");
 $newsData = $newsQuery->fetch_assoc();
@@ -43,22 +52,30 @@ $newsData = $newsQuery->fetch_assoc();
 <body>
     <div class="dashboard-container">
         <!-- Sidebar -->
-   <?php
-    include '../sidebar.php';
-
-   ?>
+        <?php include '../sidebar.php'; ?>
 
         <!-- Main Content -->
         <div class="main-content">
             <header>
-                  <h1>Welcome: <b><?= htmlspecialchars($name) ?></b></h1> 
+                <h1>Welcome: <b><?= htmlspecialchars($name) ?></b></h1> 
             </header>
+
             <div class="cards-container">
                 <div class="cards">
                     <div class="card">
-                        <i class="fas fa-users"></i>
-                        <h3>Total Users</h3>
-                        <p><?= $userData['total_users'] ?></p>
+                        <i class="fas fa-user-graduate"></i>
+                        <h3>Total Students</h3>
+                        <p><?= $studentData['total_students'] ?></p>
+                    </div>
+                    <div class="card">
+                        <i class="fas fa-chalkboard-teacher"></i>
+                        <h3>Total Lecturers</h3>
+                        <p><?= $lecturerData['total_lecturers'] ?></p>
+                    </div>
+                    <div class="card">
+                        <i class="fas fa-user-shield"></i>
+                        <h3>Total Admins</h3>
+                        <p><?= $adminData['total_admins'] ?></p>
                     </div>
                     <div class="card">
                         <i class="fas fa-file-alt"></i>
@@ -75,10 +92,8 @@ $newsData = $newsQuery->fetch_assoc();
                         <h3>News Posts</h3>
                         <p><?= $newsData['total_news'] ?></p>
                     </div>
-                    
                 </div>
             </div>
-          
         </div>
     </div>
 </body>

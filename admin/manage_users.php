@@ -2,8 +2,8 @@
 include '../connection.php';
 include '../session_check.php';
 
-// Fetch all users
-$sql = "SELECT * FROM users";
+// Fetch all users without password column
+$sql = "SELECT user_id, full_name, email, role FROM users";
 $result = mysqli_query($conn, $sql);
 if (!$result) {
     die("Error fetching users: " . mysqli_error($conn));
@@ -74,7 +74,7 @@ if (!$result) {
 <body>
 
 <?php if (isset($_GET['success']) && $_GET['success'] == 1): ?>
-<script>alert("✅ User data updated successfully!");</script>
+<script>alert("User data updated successfully!");</script>
 <?php endif; ?>
 
 <div class="dashboard-container">
@@ -89,7 +89,6 @@ if (!$result) {
                         <th>S/N</th>
                         <th>Name</th>
                         <th>Email</th>
-                        <th>Password</th>
                         <th>Role</th>
                         <th>Action</th>
                     </tr>
@@ -102,7 +101,6 @@ if (!$result) {
                             <td><?= $sn++ ?></td>
                             <td><?= htmlspecialchars($row['full_name']) ?></td>
                             <td><?= htmlspecialchars($row['email']) ?></td>
-                            <td><?= htmlspecialchars($row['password']) ?></td>
                             <td><?= htmlspecialchars($row['role']) ?></td>
                             <td>
                                 <a href="edit_users.php?id=<?= $row['user_id'] ?>" 

@@ -16,7 +16,7 @@
           display: flex;
           flex-direction: column;
           justify-content: space-between;
-          height: 100vh;
+          height: auto;
           box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
           padding-bottom: 20px;
       }
@@ -209,4 +209,45 @@
           margin-top: 5px;
           color: #001f3f;
           font-weight: bold;
+      }
+      /* Responsive Sidebar Toggle Button */
+      
+      .sidebar-toggle {
+          display: none;
+          position: absolute;
+          top: 15px;
+          left: 15px;
+          background-color: #000;
+          color: #32CD32;
+          border: none;
+          padding: 10px 15px;
+          font-size: 18px;
+          cursor: pointer;
+          z-index: 9999;
+          border-radius: 5px;
+      }
+      /* Show toggle button on small screens */
+      
+      @media (max-width: 768px) {
+          .sidebar {
+              position: fixed;
+              left: -250px;
+              top: 0;
+              height: 100%;
+              transition: left 0.3s ease-in-out;
+              z-index: 1000;
+          }
+          .sidebar.active {
+              left: 0;
+          }
+          .main-content {
+              padding: 20px;
+              margin-left: 0;
+          }
+          .sidebar-toggle {
+              display: block;
+          }
+          .dashboard-container {
+              flex-direction: column;
+          }
       }

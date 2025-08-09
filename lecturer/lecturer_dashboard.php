@@ -21,9 +21,6 @@ $studentQuery = $conn->query("SELECT COUNT(*) AS total_students FROM users WHERE
 $studentData = $studentQuery->fetch_assoc();
 
 
-// Count total news posts
-$newsQuery = $conn->query("SELECT COUNT(*) AS total_news FROM news");
-$newsData = $newsQuery->fetch_assoc();
 
 // Count present students only
 $presentQuery = $conn->query("
@@ -71,11 +68,6 @@ $absentData = $absentQuery->fetch_assoc();
                     </div>
 
                     
-                    <div class="card">
-                        <i class="fas fa-newspaper"></i>
-                        <h3>News Posts</h3>
-                        <p><?= $newsData['total_news'] ?></p>
-                    </div>
 
                     <div class="card">
                         <i class="fas fa-user-check"></i>

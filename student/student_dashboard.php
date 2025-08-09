@@ -23,7 +23,7 @@ if ($row = $result->fetch_assoc()) {
 
     if ($status_row = $check_result->fetch_assoc()) {
         if ($status_row['status'] !== 'approved') {
-            echo "<script>alert('Maombi yako bado hayajaidhinishwa!'); window.location.href = 'pending.php';</script>";
+            echo "<script>alert('Maombi yako bado hayajaidhinishwa!'); window.location.href = '../applicant/application_success.php';</script>";
             exit;
         }
     } else {
