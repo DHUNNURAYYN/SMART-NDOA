@@ -27,8 +27,8 @@ function sendNotification($to, $name, $status, $conn) {
         $mail->isSMTP();
         $mail->Host       = 'smtp.gmail.com';
         $mail->SMTPAuth   = true;
-        $mail->Username   = 'othmanhamad130@gmail.com'; // ✅ Correct Gmail
-        $mail->Password   = 'bczw ggnp dcmt wpjh';      // 🔑 App Password
+        $mail->Username   = 'othmanhamad130@gmail.com'; // Your Gmail
+        $mail->Password   = 'bczw ggnp dcmt wpjh';      // Your App Password
         $mail->SMTPSecure = 'tls';
         $mail->Port       = 587;
 
@@ -40,14 +40,14 @@ function sendNotification($to, $name, $status, $conn) {
         $mail->isHTML(true);
         $mail->Subject = 'Status ya Maombi Yako';
 
-        // Email body
+        // Email body based on status
         if ($status == 'approved') {
             $mail->Body = "
                 <div style='font-family: Arial, sans-serif; color: #333;'>
                     <h2 style='color: #006400;'>Hongera $name!</h2>
                     <p>Tunapenda kukufahamisha kuwa <b>maombi yako yamekubaliwa rasmi</b> kwa ajili ya kushiriki mafunzo ya maadili ya ndoa yanayoendeshwa na <b>SMART NDOA SYSTEM</b>.</p>
                     
-                    <p>Yatakayo anza Tarehe<b> $startDate <b/>siku ya <b>Jumamosi </b>hapo <b>Jamii Zinjibar</b></p>
+                    <p>Yatakayo anza Tarehe <b>$startDate</b>, siku ya <b>Jumamosi</b> hapo <b>Jamii Zinjibar</b></p>
 
                     <p>Karibu kwenye safari ya kujifunza kuhusu ndoa kwa ukamilifu wake. Mafunzo haya ni muhimu sana kwa maandalizi ya maisha ya ndoa yenye mafanikio, hekima na maadili mema.</p>
 
@@ -60,7 +60,7 @@ function sendNotification($to, $name, $status, $conn) {
 
                     <hr style='margin: 30px 0; border: 1px dashed #ccc;'>
 
-                    <p>Tafadhali hakikisha unaendelea kuangalia <b>barua pepe yako</b> kwa taarifa zaidi .</p>
+                    <p>Tafadhali hakikisha unaendelea kuangalia <b>barua pepe yako</b> kwa taarifa zaidi.</p>
 
                     <p style='margin-top: 25px;'>Tunatarajia kukuona hivi karibuni katika mafunzo yetu. Asante kwa kuchagua SMART NDOA SYSTEM.</p>
                     
@@ -70,13 +70,13 @@ function sendNotification($to, $name, $status, $conn) {
         } else {
             $mail->Body = "
                 <h3>Habari $name,</h3>
-                <p>Maombi yako yamekataliwa .<br>Jaribu tena au wasiliana nasi kwa msaada zaidi.</p>
+                <p>Maombi yako yamekataliwa.<br>Jaribu tena au wasiliana nasi kwa msaada zaidi.</p>
             ";
         }
 
         $mail->send();
 
     } catch (Exception $e) {
-        echo " Email not sent. Error: {$mail->ErrorInfo}";
+        echo "Email not sent. Error: {$mail->ErrorInfo}";
     }
 }

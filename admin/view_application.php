@@ -3,7 +3,7 @@ include '../connection.php';
 include '../session_check.php';
 
 if (!isset($_GET['id'])) {
-    echo "⚠️ Hakuna fomu iliyochaguliwa.";
+    echo " Hakuna fomu iliyochaguliwa.";
     exit;
 }
 
@@ -17,7 +17,7 @@ $stmt->execute();
 $result = $stmt->get_result();
 
 if ($result->num_rows < 1) {
-    echo "⚠️ Fomu haipo.";
+    echo " Fomu haipo.";
     exit;
 }
 
@@ -78,21 +78,32 @@ $form = $result->fetch_assoc();
 }
 
 
-.approve-btn {
-    background-color: #28a745;
-    transition: background-color 0.3s ease;
+.buttons {
+    margin-top: 15px;
 }
-.approve-btn:hover {
-    background-color: #218838;
+.buttons a {
+    display: inline-block;
+    padding: 10px 20px;
+    border-radius: 6px;
+    color: white;
+    text-decoration: none;
+    font-weight: 600;
+    margin-right: 10px;
+    transition: background-color 0.3s ease;
 }
 
 .edit-btn {
-    
-    background-color: #007bff;
-    transition: background-color 0.3s ease;
+    background-color: #007bff; /* Blue */
 }
 .edit-btn:hover {
     background-color: #0056b3;
+}
+
+.approve-btn {
+    background-color: #45584aff; /* Green */
+}
+.approve-btn:hover {
+    background-color: #1e7e34;
 }
 
 img {
@@ -114,23 +125,22 @@ img {
     transform: scale(1.05);
 }
 
-.download-btn {
-    display: inline-block;
-    margin-top: 8px;
-    padding: 6px 14px;
-    background-color: #2ecc71;
-    color: #fff;
-    text-decoration: none;
-    border-radius: 5px;
-    font-weight: bold;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-    transition: background-color 0.3s ease;
+
+.download-id-card {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+  color: #007bff;
+  font-weight: 600;
 }
 
-.download-btn:hover {
-    background-color: #27ae60;
+.download-id-card i {
+  margin-right: 8px;
+  font-size: 18px;
 }
-
+.download-id-card:hover {
+  color: #0056b3;
+}
 
     </style>
    
@@ -143,11 +153,11 @@ img {
 
     <div class="main-content">
         <header>
-            <h1>View Application</h1>
+            <h1>Tazama Maombi</h1>
         </header>
 
         <div class="info-box">
-            <h3>👤 Taarifa Binafsi</h3>
+            <h3> Taarifa Binafsi</h3>
             <table>
                 <tr><th>Jina Kamili</th><td><?= $form['full_name'] ?></td></tr>
                 <tr><th>Jinsia</th><td><?= $form['gender'] ?></td></tr>
@@ -172,17 +182,18 @@ img {
                     
                     <!-- Download button -->
                     <br>
-                    <a href="<?= htmlspecialchars('/applicant/' . $form['id_picture']) ?>" download class="download-btn">
-                        Download ID CARD
+                    <a href="path_to_id_card.pdf" download class="download-id-card">
+                    
                     </a>
+
                 </td>
 
 
                 </tr>
             </table>
             <div class="buttons">
-                <a class="edit-btn" href="edit_application.php?id=<?= $form['form_id'] ?>">Update</a>
-                <a class="approve-btn" href="generate_application_pdf.php?id=<?= $form['form_id'] ?>" target="_blank">Approve & Generate PDF</a>
+                <a class="edit-btn" href="edit_application.php?id=<?= $form['form_id'] ?>">Maboresho</a>
+                <a class="approve-btn" href="generate_application_pdf.php?id=<?= $form['form_id'] ?>" target="_blank">⬇ Pakua Ripoti</a>
             </div>
           
         </div>

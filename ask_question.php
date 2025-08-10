@@ -3,7 +3,6 @@ session_start();
 include 'connection.php';
 
 $errors = [];
-$success = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $name = trim($_POST['name'] ?? '');
@@ -27,9 +26,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->bind_param("sss", $name, $email, $question);
 
         if ($stmt->execute()) {
-            // JS Alert on success
             echo "<script>
-                alert('Umefanikiwa kuuliza swali. Hivyo tutakutuma jibu lako kupitia Gmail.');
+                alert('Umefanikiwa kuuliza swali. Hivyo tutakutumia jibu lako kupitia barua pepe.');
                 window.location.href = 'index.php';
             </script>";
             exit();
@@ -41,7 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="sw">
 <head>
 <meta charset="UTF-8" />
 <title>Uliza Swali | SMART NDOA</title>
@@ -49,11 +47,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <style>
     form {
         margin: 50px auto;
-        width: 50%;
+        max-width: 600px;
         padding: 20px;
         border: 1px solid #ccc;
         border-radius: 10px;
-        box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         background-color: #fff;
     }
     form label {
@@ -70,17 +68,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         border: 1px solid #aaa;
         border-radius: 5px;
         box-sizing: border-box;
+        font-size: 16px;
     }
     form button {
         margin-top: 20px;
-        padding: 10px 20px;
+        padding: 12px 20px;
         background-color: #007bff;
         color: white;
-        width: 100%;
         border: none;
         border-radius: 5px;
         cursor: pointer;
         font-weight: bold;
+        font-size: 16px;
+        width: 100%;
         transition: background-color 0.3s ease;
     }
     form button:hover {
@@ -95,12 +95,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     .message.error {
         color: red;
     }
+    .btn-secondary {
+        background-color: #6c757d;
+        margin-top: 10px;
+    }
+    .btn-secondary:hover {
+        background-color: #5a6268;
+    }
 </style>
 </head>
 <body>
     <div class="main-content">
         <header>
-            <h2>Uliza Swali </h2>
+            <h2>Uliza Swali</h2>
         </header>
 
         <?php if (!empty($errors)): ?>
@@ -120,8 +127,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <textarea name="question" rows="5" required><?= htmlspecialchars($_POST['question'] ?? '') ?></textarea>
 
             <button type="submit">Tuma Swali</button>
-                <button type="button" onclick="window.location.href='index.php'">Hairi Kutuma</button>
-
+            <button type="button" class="btn-secondary" onclick="window.location.href='index.php'">Hairi Kutuma</button>
+        </form>
     </div>
 </body>
 </html>

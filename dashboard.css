@@ -1,6 +1,5 @@
 body {
     margin: 0;
-    font-family: 'Roboto', sans-serif;
     background: whitesmoke;
 }
 
@@ -18,10 +17,8 @@ body {
     flex-direction: column;
     justify-content: space-between;
     height: auto;
-    /* <-- fix this */
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
     padding-bottom: 20px;
-    transition: transform 0.3s ease-in-out;
 }
 
 .sidebar-header {
@@ -42,6 +39,10 @@ body {
     font-size: 20px;
     font-family: 'Poppins', sans-serif;
     border-bottom: 4px solid #32CD32;
+}
+
+h1 {
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
 }
 
 .sidebar-menu {

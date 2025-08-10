@@ -45,7 +45,7 @@ $newsData = $newsQuery->fetch_assoc();
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Admin Dashboard</title>
+    <title>Dashibodi ya Admin</title>
     <link rel="stylesheet" href="../dashboard.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
@@ -57,41 +57,32 @@ $newsData = $newsQuery->fetch_assoc();
         <!-- Main Content -->
         <div class="main-content">
             <header>
-                <h1>Welcome: <b><?= htmlspecialchars($name) ?></b></h1> 
+                <h1>Karibu: <b><?= htmlspecialchars($name) ?></b></h1> 
             </header>
 
             <div class="cards-container">
                 <div class="cards">
                     <div class="card">
                         <i class="fas fa-user-graduate"></i>
-                        <h3>Total Students</h3>
+                        <h3>Jumla ya Wanafunzi</h3>
                         <p><?= $studentData['total_students'] ?></p>
                     </div>
                     <div class="card">
                         <i class="fas fa-chalkboard-teacher"></i>
-                        <h3>Total Lecturers</h3>
+                        <h3>Jumla ya Walimu</h3>
                         <p><?= $lecturerData['total_lecturers'] ?></p>
                     </div>
                     <div class="card">
                         <i class="fas fa-user-shield"></i>
-                        <h3>Total Admins</h3>
+                        <h3>Jumla ya Wasimamizi</h3>
                         <p><?= $adminData['total_admins'] ?></p>
                     </div>
                     <div class="card">
                         <i class="fas fa-file-alt"></i>
-                        <h3>Applications</h3>
+                        <h3>Maombi</h3>
                         <p><?= $appData['total_apps'] ?></p>
                     </div>
-                    <div class="card">
-                        <i class="fas fa-book"></i>
-                        <h3>Questions</h3>
-                        <p><?= $bookData['total_questions'] ?></p>
-                    </div>
-                    <div class="card">
-                        <i class="fas fa-newspaper"></i>
-                        <h3>News Posts</h3>
-                        <p><?= $newsData['total_news'] ?></p>
-                    </div>
+                   
                 </div>
             </div>
         </div>

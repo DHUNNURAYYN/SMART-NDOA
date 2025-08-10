@@ -12,7 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_id'])) {
     $deleteStmt->close();
 }
 
-// Handle Approve
+// Handle Approve / Reject
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'], $_POST['form_id'])) {
     $formId = intval($_POST['form_id']);
     $status = $_POST['action'] === 'approve' ? 'approved' : 'rejected';
@@ -23,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'], $_POST['for
     $stmt->execute();
     $stmt->close();
 
-    // Fetch student's email & name
+    // Fetch student's email & name & phone
     $infoStmt = $conn->prepare("SELECT email, full_name, phone FROM application_form WHERE form_id = ?");
     $infoStmt->bind_param("i", $formId);
     $infoStmt->execute();
@@ -31,8 +31,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'], $_POST['for
     $infoStmt->fetch();
     $infoStmt->close();
 
-    // Send email notification
-    sendNotification($email, $full_name, $status);
+    // Send email notification — **pass $conn as 4th argument**
+    sendNotification($email, $full_name, $status, $conn);
 
     // If approved, update user role to 'student'
     if ($status === 'approved') {
@@ -53,11 +53,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'], $_POST['for
 }
 ?>
 
+
 <!DOCTYPE html>
-<html lang="en">
+<html lang="sw">
 <head>
     <meta charset="UTF-8" />
-    <title>Manage Applications</title>
+    <title>Shuhulikia  Maombi</title>
     <link rel="stylesheet" href="../dashboard.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
     <style>
@@ -93,7 +94,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'], $_POST['for
             text-transform: capitalize;
         }
 
-        /* Icon action styles like Manage Users */
         .icon-action {
             font-size: 18px;
             margin-right: 10px;
@@ -133,21 +133,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'], $_POST['for
 
     <div class="main-content">
         <header>
-            <h1>Manage Applications</h1>
+            <h1>Shuhulikia Maombi</h1>
         </header>
 
         <div class="applications">
             <table>
                 <thead>
                     <tr>
-                        <th>S/N</th>
-                        <th>Full Name</th>
-                        <th>Phone</th>
+                        <th>Nambari</th>
+                        <th>Jina Kamili</th>
+                        <th>Simu</th>
                         <th>Shehia</th>
-                        <th>District</th>
-                        <th>Employed</th>
-                        <th>Status</th>
-                        <th>Action</th>
+                        <th>Wilaya</th>
+                        <th>Umeajiriwa?</th>
+                        <th>Hali</th>
+                        <th>Hatua</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -172,23 +172,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'], $_POST['for
                                 <form method="post" class="inline-form" style="margin-right:10px;">
                                     <input type="hidden" name="form_id" value="<?= $row['form_id'] ?>" />
                                     <input type="hidden" name="action" value="approve" />
-                                    <button type="submit" class="icon-action icon-approve icon-button" title="Approve">
+                                    <button type="submit" class="icon-action icon-approve icon-button" title="Kubali">
                                         <i class="fas fa-check"></i>
                                     </button>
                                 </form>
                             <?php else: ?>
-                                <span style="color:gray; font-weight:bold;">Approved</span>
+                                <span style="color:gray; font-weight:bold;">Imekubaliwa</span>
                             <?php endif; ?>
 
                             <a href="view_application.php?id=<?= $row['form_id'] ?>" 
-                               title="View" 
+                               title="Angalia" 
                                class="icon-action icon-view" target="_blank">
                                 <i class="fas fa-eye"></i>
                             </a>
 
-                            <form method="post" onsubmit="return confirm('Are you sure you want to delete this application?');" class="inline-form">
+                            <form method="post" onsubmit="return confirm('Una uhakika unataka kufuta maombi haya?');" class="inline-form">
                                 <input type="hidden" name="delete_id" value="<?= $row['form_id'] ?>" />
-                                <button type="submit" name="delete" title="Delete" class="icon-action icon-delete icon-button">
+                                <button type="submit" name="delete" title="Futa" class="icon-action icon-delete icon-button">
                                     <i class="fas fa-trash-alt"></i>
                                 </button>
                             </form>
@@ -197,7 +197,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action'], $_POST['for
                 <?php
                     endwhile;
                 else:
-                    echo "<tr><td colspan='8'>No applications found.</td></tr>";
+                    echo "<tr><td colspan='8'>Hakuna maombi yaliyopatikana.</td></tr>";
                 endif;
                 ?>
                 </tbody>

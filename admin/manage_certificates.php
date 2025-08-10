@@ -2,16 +2,16 @@
 include '../connection.php';
 include '../session_check.php';
 
-// ✅ Create the visibility table if not exists
+// Create the visibility table if not exists
 $conn->query("CREATE TABLE IF NOT EXISTS attendance_visibility (
     id INT AUTO_INCREMENT PRIMARY KEY,
     is_visible TINYINT(1) DEFAULT 0
 )");
 
-// ✅ Insert a default row if empty
+//  Insert a default row if empty
 $conn->query("INSERT IGNORE INTO attendance_visibility (id, is_visible) VALUES (1, 0)");
 
-// ✅ Handle toggle request
+//  Handle toggle request
 if (isset($_POST['toggle_visibility'])) {
     $new_visibility = $_POST['current'] == '1' ? 0 : 1;
     $conn->query("UPDATE attendance_visibility SET is_visible = $new_visibility WHERE id = 1");
@@ -19,7 +19,7 @@ if (isset($_POST['toggle_visibility'])) {
     exit;
 }
 
-// ✅ Fetch current visibility
+//  Fetch current visibility
 $visibility_result = $conn->query("SELECT is_visible FROM attendance_visibility WHERE id = 1");
 $visibility = ($visibility_result && $visibility_result->num_rows > 0) 
     ? $visibility_result->fetch_assoc()['is_visible'] 
@@ -27,10 +27,10 @@ $visibility = ($visibility_result && $visibility_result->num_rows > 0)
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="sw">
 <head>
     <meta charset="UTF-8">
-    <title>Manage Certificates</title>
+    <title>Simamia Vyeti</title>
     <link rel="stylesheet" href="../dashboard.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
@@ -73,7 +73,7 @@ $visibility = ($visibility_result && $visibility_result->num_rows > 0)
 
         .toggle-btn {
             padding: 10px 20px;
-            background-color: #b22222;;
+            background-color: #b22222;
             color: white;
             border: none;
             border-radius: 6px;
@@ -91,30 +91,29 @@ $visibility = ($visibility_result && $visibility_result->num_rows > 0)
     <?php include '../sidebar.php'; ?>
 
     <div class="main-content">
-        <header><h1>Manage Certificates</h1></header>
+        <header><h1>Simamia Vyeti</h1></header>
 
         <div class="users">
-            <!-- ✅ Toggle Button -->
+            <!--  Toggle Button -->
             <form method="POST" style="margin-bottom: 20px;">
                 <input type="hidden" name="current" value="<?= $visibility ?>">
                 <button type="submit" name="toggle_visibility" class="toggle-btn <?= $visibility ? 'red' : '' ?>">
                    <?= $visibility 
-                        ? '<i class="fas fa-check-circle" style="color:green;"></i> Allow Certificate' 
-                        : '<i class="fas fa-times-circle" style="color:red;"></i> Block Certificate' 
+                        ? '<i class="fas fa-check-circle" style="color:green;"></i> Ruhusu Vyeti' 
+                        : '<i class="fas fa-times-circle" style="color:red;"></i> Zuia Vyeti' 
                     ?>
-
                 </button>
             </form>
 
             <table>
                 <thead>
                     <tr>
-                        <th>S/N</th>
-                        <th>Student Name</th>
-                        <th>Course</th>
-                        <th>Present Days</th>
-                        <th>Eligibility</th>
-                        <th>Action</th>
+                        <th>No.</th>
+                        <th>Jina la Mwanafunzi</th>
+                        <th>Kozi</th>
+                        <th>Siku za Kuwapo</th>
+                        <th>Ustahiki</th>
+                        <th>Hatua</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -142,24 +141,24 @@ $visibility = ($visibility_result && $visibility_result->num_rows > 0)
                         $eligible = $percentage >= 75;
 
                         $status = $eligible 
-                            ? '<span style="color:green;">Eligible</span>' 
-                            : '<span style="color:red;">Not Eligible</span>';
+                            ? '<span style="color:green;">Mstahiki</span>' 
+                            : '<span style="color:red;">Hastahiki</span>';
 
                         $action = $eligible
                             ? "
-                                <a href='view_certificate.php?user_id=$user_id' title='View Certificate' class='icon-action icon-view' target='_blank'>
+                                <a href='view_certificate.php?user_id=$user_id' title='Tazama Cheti' class='icon-action icon-view' target='_blank'>
                                     <i class='fas fa-eye'></i>
                                 </a>
-                                <a href='download_certificate.php?user_id=$user_id' title='Download Certificate' class='icon-action icon-download'>
+                                <a href='download_certificate.php?user_id=$user_id' title='Pakua Cheti' class='icon-action icon-download'>
                                     <i class='fas fa-download'></i>
                                 </a>
                               "
-                            : "<span class='not-eligible'>Not Eligible</span>";
+                            : "<span class='not-eligible'>Hastahiki</span>";
 
                         echo "<tr>
                                 <td>$sn</td>
                                 <td>$name</td>
-                                <td>Marriage Ethics</td>
+                                <td>Maadili ya Ndoa</td>
                                 <td>$present</td>
                                 <td>$status</td>
                                 <td>$action</td>

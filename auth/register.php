@@ -9,7 +9,7 @@ if (isset($_POST['submit'])) {
     $confirm_password = trim($_POST['confirm_password']);
 
     if ($password_plain !== $confirm_password) {
-        header("location: register.php?sms=Passwords do not match");
+        header("location: register.php?sms=Nenosiri hayalingani");
         exit();
     }
 
@@ -18,7 +18,7 @@ if (isset($_POST['submit'])) {
     $check_result = mysqli_query($conn, $check_query);
 
     if (mysqli_num_rows($check_result) > 0) {
-        header("location: register.php?sms=Sorry the user already exists");
+        header("location: register.php?sms=Samahani, mtumiaji tayari yupo");
         exit();
     }
 
@@ -31,19 +31,19 @@ if (isset($_POST['submit'])) {
     $result = mysqli_query($conn, $sql);
 
     if ($result) {
-        header("location: login.php?sms=User Registered Successfully");
+        header("location: login.php?sms=Usajili umefanikiwa");
     } else {
-        header("location: register.php?sms=Registration failed");
+        header("location: register.php?sms=Usajili umeshindikana");
     }
 }
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="sw">
 <head>
     <meta charset="UTF-8">
-    <title>Register</title>
-    <link rel="stylesheet" href="../register.css">
+    <title>Jisajili</title>
+    <link rel="stylesheet" href="register.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
     <script>
@@ -56,54 +56,54 @@ if (isset($_POST['submit'])) {
             var phone = document.forms["registerForm"]["phone"].value;
 
             if (fullname.trim() === "") {
-                alert("Full Name is required.");
+                alert("Jina kamili linahitajika.");
                 return false;
             }
 
             if (phone.trim() === "") {
-                alert("Phone number is required.");
+                alert("Namba ya simu inahitajika.");
                 return false;
             }
 
             var phonePattern = /^[0-9]{7,15}$/;
             if (!phonePattern.test(phone)) {
-                alert("Enter a valid phone number (7 to 15 digits).");
+                alert("Weka namba ya simu sahihi (tarakimu 7 hadi 15).");
                 return false;
             }
 
             if (email.trim() === "") {
-                alert("Email is required.");
+                alert("Barua pepe inahitajika.");
                 return false;
             }
 
             var emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
             if (!emailPattern.test(email)) {
-                alert("Please enter a valid email address.");
+                alert("Tafadhali weka barua pepe sahihi.");
                 return false;
             }
 
             if (password === "") {
-                alert("Password is required.");
+                alert("Nenosiri linahitajika.");
                 return false;
             }
 
             if (password.length < 6) {
-                alert("Password must be at least 6 characters long.");
+                alert("Nenosiri lazima liwe na angalau herufi 6.");
                 return false;
             }
 
             if (confirm_password === "") {
-                alert("Please confirm your password.");
+                alert("Tafadhali thibitisha nenosiri.");
                 return false;
             }
 
             if (password !== confirm_password) {
-                alert("Passwords do not match.");
+                alert("Nenosiri hayalingani.");
                 return false;
             }
 
             if (!terms) {
-                alert("You must agree to the terms.");
+                alert("Lazima ukubali masharti.");
                 return false;
             }
 
@@ -123,43 +123,43 @@ if (isset($_POST['submit'])) {
         ?>
 
         <div class="user-logo">
-            <img src="../Logo/logo.JPG" alt="Mufti Logo">
+            <img src="../Logo/logo.JPG" alt="Nembo ya Mufti">
         </div>
 
         <form name="registerForm" action="register.php" method="POST" onsubmit="return validateForm();">
             <div class="input-group">
                 <i class="fas fa-user"></i>
-                <input type="text" name="fullname" placeholder="Full Name" required>
+                <input type="text" name="fullname" placeholder="Jina Kamili" required>
             </div>
 
             <div class="input-group">
                 <i class="fas fa-phone"></i>
-                <input type="text" name="phone" placeholder="Phone Number" required>
+                <input type="text" name="phone" placeholder="Namba ya Simu" required>
             </div>
 
             <div class="input-group">
                 <i class="fas fa-envelope"></i>
-                <input type="email" name="email" placeholder="Email ID" required>
+                <input type="email" name="email" placeholder="Barua Pepe" required>
             </div>
 
             <div class="input-group">
                 <i class="fas fa-lock"></i>
-                <input type="password" name="password" placeholder="Password" required>
+                <input type="password" name="password" placeholder="Nenosiri" required>
             </div>
 
             <div class="input-group">
                 <i class="fas fa-lock"></i>
-                <input type="password" name="confirm_password" placeholder="Confirm Password" required>
+                <input type="password" name="confirm_password" placeholder="Thibitisha Nenosiri" required>
             </div>
 
             <div class="options">
-                <label><input type="checkbox" name="terms"> I agree to the terms</label>
+                <label><input type="checkbox" name="terms"> Nakubali masharti</label>
             </div>
 
-            <button type="submit" name="submit">REGISTER</button>
+            <button type="submit" name="submit">JISAJILI</button>
         </form>
 
-        <p class="register-link">Already have an account! <a href="login.php">Login</a></p>
+        <p class="register-link">Tayari una akaunti? <a href="login.php">Ingia</a></p>
     </div>
 </body>
 </html>

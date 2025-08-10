@@ -29,22 +29,29 @@ if (!$user) {
 <head>
     <meta charset="UTF-8">
     <title>Edit User</title>
-     <link rel="stylesheet" href="../dashboard.css">
+      <link rel="stylesheet" href="../dashboard.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: #f7f7f7;
-        }
+      
 
-        .container {
-            width: 450px;
-            margin: 50px auto;
-            background: #fff;
-            border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-            padding: 30px;
-        }
+       body, html {
+    height: 100%;
+    margin: 0;
+    display: flex;
+    justify-content: center; /* horizontal center */
+    align-items: center;     /* vertical center */
+    background: #f7f7f7;     /* keep your background */
+}
+
+.container {
+    width: 750px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    /* remove margin: 50px auto; */
+}
+
 
         h2 {
             text-align: center;
@@ -60,16 +67,20 @@ if (!$user) {
         }
 
         input[type="text"],
-        input[type="email"],
-        input[type="password"],
-        select {
-            width: 100%;
-            padding: 10px;
-            margin-top: 5px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            font-size: 16px;
-        }
+input[type="email"],
+input[type="password"],
+select {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 16px;
+    height: 42px;          /* fixed height to match inputs */
+    line-height: 1.2;      /* adjusts vertical text alignment */
+    box-sizing: border-box; /* ensures padding included in height */
+}
+
 
         input[disabled] {
             background-color: #eee;
@@ -94,29 +105,31 @@ if (!$user) {
 </head>
 <body>
 
+
 <div class="container">
-    <h2>Edit User Details</h2>
+    <h2>Hariri Maelezo ya Mtumiaji</h2>
     <form action="update_user.php" method="post">
         <input type="hidden" name="user_id" value="<?php echo $user['user_id']; ?>">
 
-        <label>Full Name:</label>
-        <input type="text" name="full_name" value="<?php echo $user['full_name']; ?>" required>
+        <label>Jina Kamili:</label>
+        <input type="text" name="full_name" value="<?= htmlspecialchars($user['full_name']) ?>" required>
 
-        <label>Email:</label>
-        <input type="email" name="email" value="<?php echo $user['email']; ?>" required>
+        <label>Barua Pepe (Email):</label>
+        <input type="email" name="email" value="<?= htmlspecialchars($user['email']) ?>" required>
 
-
-        <label>Role:</label>
+        <label>Jukumu (Role):</label>
         <select name="role" required>
-            <option value="">-- Select Role --</option>
-            <option value="admin" <?php if ($user['role'] == 'admin') echo 'selected'; ?>>Admin</option>
-            <option value="student" <?php if ($user['role'] == 'student') echo 'selected'; ?>>Student</option>
-            <option value="lecturer" <?php if ($user['role'] == 'lecturer') echo 'selected'; ?>>Lecturer</option>
+            <option value="">-- Chagua Jukumu --</option>
+            <option value="admin" <?= $user['role'] == 'admin' ? 'selected' : '' ?>>Msimamizi (Admin)</option>
+            <option value="student" <?= $user['role'] == 'student' ? 'selected' : '' ?>>Mwanafunzi</option>
+            <option value="lecturer" <?= $user['role'] == 'lecturer' ? 'selected' : '' ?>>Mwalimu</option>
         </select>
 
-        <button type="submit">Update User</button>
+        <button type="submit">Hifadhi Mabadiliko</button>
     </form>
 </div>
+    </div>
+    </div>
 
 </body>
 </html>

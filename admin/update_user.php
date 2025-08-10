@@ -7,13 +7,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     // Retrieve submitted data safely
     $user_id   = $_POST['user_id'];
-    $full_name = $_POST['full_name'];
-    $email     = $_POST['email'];
-    $role      = $_POST['role'];
+    $full_name = trim($_POST['full_name']);
+    $email     = trim($_POST['email']);
+    $role      = trim($_POST['role']);
 
     // Validate input
     if (empty($user_id) || empty($full_name) || empty($email) || empty($role)) {
-        echo "⚠️ All fields are required.";
+        echo "⚠️ Tafadhali jaza sehemu zote.";
+        exit;
+    }
+
+    // You may want to validate email format too
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        echo "⚠️ Barua pepe si halali.";
         exit;
     }
 
@@ -26,11 +32,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         header("Location: manage_users.php?success=1");
         exit;
     } else {
-        echo "❌ Failed to update user: " . $stmt->error;
+        echo "❌ Imeshindikana kusasisha mtumiaji: " . $stmt->error;
     }
 
 } else {
-    echo "Invalid request.";
+    echo "Ombi batili.";
     exit;
 }
 ?>

@@ -31,16 +31,12 @@ $result = $conn->query($sql);
             padding: 12px;
             text-align: center;
             border-bottom: 1px solid #ddd;
-            background: white; /* Make each cell white */
+            background: white;
         }
         th {
             background: #228B22;
             color: white;
         }
-        /* Removed the alternating row color */
-        /* tr:nth-child(even) {
-            background-color: #f9f9f9;
-        } */
     </style>
 </head>
 <body>
@@ -66,9 +62,9 @@ $result = $conn->query($sql);
                 </thead>
                 <tbody>
                 <?php
-                  $i = 1;
-                if ($result->num_rows > 0):
-                    while ($row = $result->fetch_assoc()) {
+                if ($result && $result->num_rows > 0):
+                    $i = 1;
+                    while ($row = $result->fetch_assoc()):
                 ?>
                     <tr>
                         <td><?= $i++ ?></td>
@@ -76,7 +72,14 @@ $result = $conn->query($sql);
                         <td><?= htmlspecialchars($row['date']) ?></td>
                         <td><?= htmlspecialchars($row['status']) ?></td>
                     </tr>
-                <?php } ?>
+                <?php
+                    endwhile;
+                else:
+                ?>
+                    <tr>
+                        <td colspan="4">Hakuna rekodi za mahudhurio.</td>
+                    </tr>
+                <?php endif; ?>
                 </tbody>
             </table>
         </div>
@@ -87,5 +90,4 @@ $result = $conn->query($sql);
 
 <?php
 $conn->close();
-endif
 ?>

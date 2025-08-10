@@ -5,7 +5,7 @@ include '../session_check.php';
 $user_id = $_SESSION['user'];
 
 // Get student name
-$name = "Student";
+$name = "Mwanafunzi";
 $sql = "SELECT full_name FROM users WHERE user_id = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("i", $user_id);
@@ -16,7 +16,7 @@ if ($row = $result->fetch_assoc()) {
 }
 
 // Total sessions = 10 weeks × 2 days (Sat & Sun) = 20
-$total_sessions = 1;
+$total_sessions = 20;
 
 // Count 'Present' entries
 $sql = "SELECT COUNT(*) as present_days FROM attendances 
@@ -33,19 +33,19 @@ $attendance_percentage = ($present_days / $total_sessions) * 100;
 // Determine eligibility
 $eligibility = '';
 if ($attendance_percentage >= 75) {
-    $eligibility = "<span style='color: green; font-weight:bold;'> Eligible for Certificate</span>";
+    $eligibility = "<span style='color: green; font-weight:bold;'>Unastahili Cheti</span>";
 } elseif ($attendance_percentage < 70) {
-    $eligibility = "<span style='color: red; font-weight:bold;'> Not Eligible for Certificate</span>";
+    $eligibility = "<span style='color: red; font-weight:bold;'>Haujastahili Cheti</span>";
 } else {
-    $eligibility = "<span style='color: orange; font-weight:bold;'> Borderline</span>";
+    $eligibility = "<span style='color: orange; font-weight:bold;'>Kiwango cha Kati</span>";
 }
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="sw">
 <head>
     <meta charset="UTF-8">
-    <title>Attendance Report - Smart Ndoa </title>
+    <title>Ripoti ya Hudhurio - Smart Ndoa</title>
     <link rel="stylesheet" href="student_dashboard.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
@@ -113,35 +113,34 @@ if ($attendance_percentage >= 75) {
     <!-- Main Content -->
     <div class="main-content">
         <header>
-            <h1>Welcome, <b><?= htmlspecialchars($name) ?></b> </h1>
+            <h1>Karibu, <b><?= htmlspecialchars($name) ?></b></h1>
         </header>
-            <?php 
+        <?php 
         $query = "SELECT is_visible FROM attendance_visibility WHERE id = 1;";
         $result = $conn->query($query);
 
         if ($result && $row = $result->fetch_assoc()) {
             if ($row['is_visible'] == 0) {
-                echo "samahani matokeo hayajatolewa"; // Not visible yet
+                echo "Samahani, matokeo hayajatolewa bado.";
             } else { ?>
                 <div class="summary">
-            <h2> Attendance Report</h2>
-            <p><strong>Total Sessions:</strong> 20 (10 Weeks × 2 Days)</p>
-            <p><strong>Days Attended:</strong> <?= $present_days ?></p>
-            <p><strong>Attendance Percentage:</strong> <?= round($attendance_percentage, 2) ?>%</p>
-            <p><strong>Status:</strong> <?= $eligibility ?></p>
+                    <h2>Ripoti ya Hudhurio</h2>
+                    <p><strong>Jumla ya Siku:</strong> 20 (Wiki 10 × Siku 2)</p>
+                    <p><strong>Siku Ulihudhuria:</strong> <?= $present_days ?></p>
+                    <p><strong>Asilimia ya Hudhurio:</strong> <?= round($attendance_percentage, 2) ?>%</p>
+                    <p><strong>Hali:</strong> <?= $eligibility ?></p>
 
-            <?php if ($attendance_percentage >= 75): ?>
-                <a href="download_certificate.php" class="btn-download" target="_blank">⬇ Download Certificate</a>
-            <?php else: ?>
-                <p class="waiting-message">Please wait for another semester to become eligible for the certificate.</p>
-            <?php endif; ?>
-        </div>
-           <?php }
+                    <?php if ($attendance_percentage >= 75): ?>
+                        <a href="download_certificate.php" class="btn-download" target="_blank">⬇ Pakua Cheti</a>
+                    <?php else: ?>
+                        <p class="waiting-message">Tafadhali subiri muhula mwingine ili kustahili cheti.</p>
+                    <?php endif; ?>
+                </div>
+        <?php }
         } else {
-            echo "KUnatatizo katika kuchukua taarifa."; // Error fetching data
+            echo "Kuna tatizo katika kuchukua taarifa.";
         }
-
-    ?>
+        ?>
     </div>
 
 </div>

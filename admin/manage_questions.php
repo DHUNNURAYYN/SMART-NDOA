@@ -91,7 +91,7 @@ if ($qres) {
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="sw">
 <head>
 <meta charset="UTF-8" />
 <title>Jibu Maswali | SMART NDOA</title>
@@ -128,6 +128,6 @@ if ($qres) {
     <?php endforeach; ?>
 <?php endif; ?>
 
-<p><a href="../admin/admin_dashboard.php">Rudi Dashboard</a></p>
+<p><a href="../admin/admin_dashboard.php">Rudi kwenye Dashibodi</a></p>
 </body>
 </html>

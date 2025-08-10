@@ -4,7 +4,7 @@ include "../session_check.php";
 
 $user_id = $_SESSION['user'];
 
-// Step 1: Get user info from users table
+// Hatua 1: Pata taarifa za mtumiaji kutoka users table
 $sql_user = "SELECT * FROM users WHERE user_id = ?";
 $stmt_user = $conn->prepare($sql_user);
 $stmt_user->bind_param("i", $user_id);
@@ -12,7 +12,7 @@ $stmt_user->execute();
 $result_user = $stmt_user->get_result();
 $student = $result_user->fetch_assoc();
 
-// Step 2: Get application info from application_form table using full_name
+// Hatua 2: Pata taarifa za fomu ya maombi kutoka application_form kwa kutumia full_name
 $sql_form = "SELECT * FROM application_form WHERE full_name = ?";
 $stmt_form = $conn->prepare($sql_form);
 $stmt_form->bind_param("s", $student['full_name']);
@@ -22,10 +22,10 @@ $form_data = $result_form->fetch_assoc();
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="sw">
 <head>
     <meta charset="UTF-8">
-    <title>Student Dashboard - Smart Ndoa 🎓</title>
+    <title>Dashboard ya Mwanafunzi - Smart Ndoa 🎓</title>
     <link rel="stylesheet" href="student_dashboard.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
@@ -46,6 +46,10 @@ $form_data = $result_form->fetch_assoc();
         }
         .main-content header h1 {
             margin-bottom: 20px;
+            color: #0b3954;
+        }
+        h3 {
+            color: #228B22;
         }
     </style>
 </head>
@@ -57,28 +61,28 @@ $form_data = $result_form->fetch_assoc();
     <!-- Main Content -->
     <div class="main-content">
         <header>
-            <h1>Welcome, <b><?php echo ($student['full_name']); ?></b> 🎓</h1>
+            <h1>Karibu, <b><?php echo htmlspecialchars($student['full_name']); ?></b> 🎓</h1>
         </header>
 
-        <!-- Profile Section -->
+        <!-- Sehemu ya Profaili -->
         <div class="section active">
             <div class="info-box">
-                <h3>👤 My Profile</h3>
+                <h3>👤 Profaili Yangu</h3>
                 <table>
-                    <tr><th>Full Name</th><td><?php echo $student['full_name']; ?></td></tr>
-                    <tr><th>Email</th><td><?php echo $student['email']; ?></td></tr>
-                    <tr><th>Phone</th><td><?php echo $form_data['phone'] ?? 'N/A'; ?></td></tr>
-                    <tr><th>Gender</th><td><?php echo $form_data['gender'] ?? 'N/A'; ?></td></tr>
-                    <tr><th>Date of Birth</th><td><?php echo $form_data['dob'] ?? 'N/A'; ?></td></tr>
-                    <tr><th>Nationality</th><td><?php echo $form_data['nationality'] ?? 'N/A'; ?></td></tr>
-                    <tr><th>District</th><td><?php echo $form_data['district'] ?? 'N/A'; ?></td></tr>
-                    <tr><th>Shehia</th><td><?php echo $form_data['shehia'] ?? 'N/A'; ?></td></tr>
-                    <tr><th>Employment</th><td><?php echo $form_data['employed'] ?? 'N/A'; ?></td></tr>
-                    <tr><th>Workplace</th><td><?php echo $form_data['workplace'] ?? 'N/A'; ?></td></tr>
-                    <tr><th>Marital Status</th><td><?php echo $form_data['marital_status'] ?? 'N/A'; ?></td></tr>
-                    <tr><th>Disability</th><td><?php echo $form_data['disability'] ?? 'None'; ?></td></tr>
-                    <tr><th>Education Level</th><td><?php echo $form_data['education_level'] ?? 'N/A'; ?></td></tr>
-                    <tr><th>Application Status</th><td><?php echo ucfirst($form_data['status'] ?? 'pending'); ?></td></tr>
+                    <tr><th>Jina Kamili</th><td><?php echo htmlspecialchars($student['full_name']); ?></td></tr>
+                    <tr><th>Barua Pepe (Email)</th><td><?php echo htmlspecialchars($student['email']); ?></td></tr>
+                    <tr><th>Simu</th><td><?php echo htmlspecialchars($form_data['phone'] ?? 'Haipo'); ?></td></tr>
+                    <tr><th>Jinsia</th><td><?php echo htmlspecialchars($form_data['gender'] ?? 'Haipo'); ?></td></tr>
+                    <tr><th>Tarehe ya Kuzaliwa</th><td><?php echo htmlspecialchars($form_data['dob'] ?? 'Haipo'); ?></td></tr>
+                    <tr><th>Uraia</th><td><?php echo htmlspecialchars($form_data['nationality'] ?? 'Haipo'); ?></td></tr>
+                    <tr><th>Wilaya</th><td><?php echo htmlspecialchars($form_data['district'] ?? 'Haipo'); ?></td></tr>
+                    <tr><th>Shehia</th><td><?php echo htmlspecialchars($form_data['shehia'] ?? 'Haipo'); ?></td></tr>
+                    <tr><th>Kazi</th><td><?php echo htmlspecialchars($form_data['employed'] ?? 'Haipo'); ?></td></tr>
+                    <tr><th>Mahali pa Kazi</th><td><?php echo htmlspecialchars($form_data['workplace'] ?? 'Haipo'); ?></td></tr>
+                    <tr><th>Hali ya Ndoa</th><td><?php echo htmlspecialchars($form_data['marital_status'] ?? 'Haipo'); ?></td></tr>
+                    <tr><th>Ulemavu</th><td><?php echo htmlspecialchars($form_data['disability'] ?? 'Hakuna'); ?></td></tr>
+                    <tr><th>Elimu</th><td><?php echo htmlspecialchars($form_data['education_level'] ?? 'Haipo'); ?></td></tr>
+                    <tr><th>Hali ya Maombi</th><td><?php echo ucfirst(htmlspecialchars($form_data['status'] ?? 'inayosubiri')); ?></td></tr>
                 </table>
             </div>
         </div>

@@ -52,10 +52,10 @@ $result = $stmt->get_result();
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="sw">
 <head>
     <meta charset="UTF-8">
-    <title>Mark Attendance</title>
+    <title>Weka Mahudhurio</title>
     <link rel="stylesheet" href="../dashboard.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
@@ -124,50 +124,53 @@ $result = $stmt->get_result();
 
     <div class="main-content">
         <header>
-            <h1>Mark Attendance (<?= $today ?>)</h1>
+            <h1>Weka Mahudhurio (<?= htmlspecialchars($today) ?>)</h1>
         </header>
 
         <div class="attendance-container">
             <form class="search-form" method="GET">
-                <input type="text" name="search" value="<?= htmlspecialchars($search_query) ?>" placeholder="Search student by name..." />
-                <button class="search-btn" type="submit"><i class="fas fa-search"></i> Search</button>
+                <input type="text" name="search" value="<?= htmlspecialchars($search_query) ?>" placeholder="Tafuta mwanafunzi kwa jina..." />
+                <button class="search-btn" type="submit"><i class="fas fa-search"></i> Tafuta</button>
             </form>
 
             <table>
                 <thead>
                 <tr>
-                    <th>S/N</th>
-                    <th>Student Name</th>
-                    <th>Course</th>
-                    <th>Date</th>
-                    <th>Status</th>
-                    <th>Action</th>
+                    <th>Nambari</th>
+                    <th>Jina la Mwanafunzi</th>
+                    <th>Kozi</th>
+                    <th>Tarehe</th>
+                    <th>Hali</th>
+                    <th>Kitendo</th>
                 </tr>
                 </thead>
                 <tbody>
                 <?php
                 $i = 1;
                 if ($result->num_rows > 0):
-                    while ($row = $result->fetch_assoc()) {
+                    while ($row = $result->fetch_assoc()):
                 ?>
                     <tr>
                         <td><?= $i++ ?></td>
                         <td><?= htmlspecialchars($row['full_name']) ?></td>
-                        <td>Marriage Ethics</td>
+                        <td>Maadili ya Ndoa</td>
                         <td><?= htmlspecialchars($today) ?></td>
                         <td><?= htmlspecialchars($row['status']) ?></td>
                         <td>
                             <form method="POST" style="margin:0;">
-                                <input type="hidden" name="user_id" value="<?= $row['user_id'] ?>" />
+                                <input type="hidden" name="user_id" value="<?= (int)$row['user_id'] ?>" />
                                 <input type="hidden" name="new_status" value="<?= $row['status'] === 'Present' ? 'Absent' : 'Present' ?>" />
                                 <button type="submit" name="toggle_status" class="btn">
-                                    <?= $row['status'] === 'Present' ? 'Mark Absent' : 'Mark Present' ?>
+                                    <?= $row['status'] === 'Present' ? 'Weka Hayupo' : 'Weka Yupo' ?>
                                 </button>
                             </form>
                         </td>
                     </tr>
-                <?php } else: ?>
-                    <tr><td colspan="6">No students found.</td></tr>
+                <?php
+                    endwhile;
+                else:
+                ?>
+                    <tr><td colspan="6">Hakuna wanafunzi waliopatikana.</td></tr>
                 <?php endif; ?>
                 </tbody>
             </table>

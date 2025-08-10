@@ -23,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $answer = trim($_POST['answer'] ?? '');
 
     if ($question_id <= 0 || empty($answer)) {
-        $errors[] = "Please provide an answer to the question.";
+        $errors[] = "Tafadhali toa jibu la swali.";
     } else {
         // Save answer
         $stmt = $conn->prepare("UPDATE questions SET answer = ?, status = 'answered', answered_at = NOW() WHERE id = ?");
@@ -39,7 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             if ($result->num_rows === 1) {
                 $row = $result->fetch_assoc();
                 $recipient_email = $row['email'];
-                $recipient_name = $row['name'] ?: 'Dear User';
+                $recipient_name = $row['name'] ?: 'Mpendwa Mtumiaji';
                 $user_question = $row['question'];
 
                 // Send email
@@ -53,32 +53,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $mail->SMTPSecure = 'tls';
                     $mail->Port = 587;
 
-                    $mail->setFrom('othmanhamad130@gmail.com', 'SMART NDOA - Question Answer');
+                    $mail->setFrom('othmanhamad130@gmail.com', 'SMART NDOA - Jibu la Swali');
                     $mail->addAddress($recipient_email, $recipient_name);
 
                     $mail->isHTML(true);
-                    $mail->Subject = "Your question has been answered";
+                    $mail->Subject = "Swali lako limejibiwa";
                     $mail->Body = "
-                        <p>Hello {$recipient_name},</p>
-                        <p><b>Your question:</b> {$user_question}</p>
-                        <p><b>Our answer:</b> {$answer}</p>
-                        <p>Please feel free to ask more questions anytime.</p>
+                        <p>Habari {$recipient_name},</p>
+                        <p><b>Swali lako:</b> {$user_question}</p>
+                        <p><b>Jibu letu:</b> {$answer}</p>
+                        <p>Tafadhali jisikie huru kuuliza maswali zaidi wakati wowote.</p>
                         <br>
-                        <p>SMART NDOA Team</p>
+                        <p>Timuu ya SMART NDOA</p>
                     ";
 
                     $mail->send();
                     
-                    $success = "Answer saved and sent to the user.";
+                    $success = "Jibu limehifadhiwa na kutumwa kwa mtumiaji.";
                 } catch (Exception $e) {
-                    $errors[] = "Email could not be sent. Error: {$mail->ErrorInfo}";
+                    $errors[] = "Barua pepe haikuweza kutumwa. Hitilafu: {$mail->ErrorInfo}";
                 }
             } else {
-                $errors[] = "Question not found.";
+                $errors[] = "Swali halikuonekana.";
             }
             $stmt2->close();
         } else {
-            $errors[] = "Failed to save the answer.";
+            $errors[] = "Imeshindikana kuhifadhi jibu.";
         }
         $stmt->close();
     }
@@ -97,7 +97,7 @@ if ($qres) {
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<title>Answer Questions</title>
+<title>Jibu Maswali</title>
 <link rel="stylesheet" href="../dashboard.css">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 <style>
@@ -149,7 +149,7 @@ textarea {
     <!-- Main Content -->
     <div class="main-content">
         <header>
-            <h1>Pending Questions</h1>
+            <h1>Maswali Yanayosubiri Jibu</h1>
         </header>
 
         <div class="answer-container">
@@ -160,17 +160,17 @@ textarea {
             <?php endif; ?>
 
             <?php if (count($questions) === 0): ?>
-                <p>No questions to answer.</p>
+                <p>Hakuna maswali ya kujibu.</p>
             <?php else: ?>
                 <?php foreach ($questions as $q): ?>
                     <div class="answer-box">
-                        <p><b>User:</b> <?= htmlspecialchars($q['name'] ?: 'Guest') ?> (<?= htmlspecialchars($q['email']) ?>)</p>
-                        <p><b>Question:</b> <?= htmlspecialchars($q['question']) ?></p>
+                        <p><b>Mtumiaji:</b> <?= htmlspecialchars($q['name'] ?: 'Mgeni') ?> (<?= htmlspecialchars($q['email']) ?>)</p>
+                        <p><b>Swali:</b> <?= htmlspecialchars($q['question']) ?></p>
                         <form method="post">
                             <input type="hidden" name="question_id" value="<?= $q['id'] ?>">
-                            <label>Your Answer:</label>
+                            <label>Jibu Lako:</label>
                             <textarea name="answer" rows="4" required></textarea>
-                            <button type="submit">Send Answer</button>
+                            <button type="submit">Tuma Jibu</button>
                         </form>
                     </div>
                 <?php endforeach; ?>

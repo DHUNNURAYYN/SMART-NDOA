@@ -48,10 +48,6 @@
             color: #100f0f;
         }
         
-        .input-group input::placeholder {
-            /* color: #141514; */
-        }
-        
         .options {
             display: flex;
             justify-content: space-between;
@@ -78,20 +74,10 @@
             background-color: #2E8B57;
             /* Hover - dark green */
         }
-        /* .user-logo {
-    width: 100px;
-    height: 100px;
-    margin: 0 auto 20px;
-    border-radius: 50%;
-    overflow: hidden;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-} */
         
         .user-logo img {
             width: 25%;
             height: auto;
-            /* object-fit: cover;
-    display: block; */
         }
         
         .register-link {

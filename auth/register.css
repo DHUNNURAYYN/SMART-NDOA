@@ -19,20 +19,6 @@ body {
     width: 420px;
 }
 
-
-/* .user-icon {
-    background-color: #173c61;
-    width: 70px;
-    height: 70px;
-    margin: -70px auto 30px;
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: #fff;
-    font-size: 28px;
-} */
-
 .input-group {
     position: relative;
     margin: 10px 0;
@@ -59,14 +45,7 @@ body {
 .user-logo img {
     width: 25%;
     height: auto;
-    /* object-fit: cover;
-    display: block; */
 }
-
-
-/* .input-group input::placeholder {
-    color: #dcdcdc; 
-}*/
 
 .options {
     display: flex;

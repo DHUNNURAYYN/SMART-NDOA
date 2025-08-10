@@ -13,7 +13,7 @@ $errors = [];
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $code = isset($_POST['code']) ? trim($_POST['code']) : '';
     if (empty($code)) {
-        $errors[] = "Please enter the code sent to your email.";
+        $errors[] = "Tafadhali ingiza nambari iliyotumwa kwenye barua pepe yako.";
     } else {
         // Get the latest unused reset record for this email
         $stmt = $conn->prepare("SELECT id, code_hash, expires_at FROM password_resets WHERE email = ? AND used = 0 ORDER BY created_at DESC LIMIT 1");
@@ -22,12 +22,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $res = $stmt->get_result();
 
         if ($res->num_rows === 0) {
-            $errors[] = "No reset request found. Please request a new code.";
+            $errors[] = "Hakuna ombi la kurekebisha nenosiri lililopatikana. Tafadhali omba nambari mpya.";
         } else {
             $row = $res->fetch_assoc();
             // Check if expired
             if (strtotime($row['expires_at']) < time()) {
-                $errors[] = "The code has expired. Please request a new code.";
+                $errors[] = "Nambari imekwisha muda wake. Tafadhali omba nambari mpya.";
             } else {
                 // Verify code
                 if (password_verify((string)$code, $row['code_hash'])) {
@@ -40,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     header("Location: reset_password.php");
                     exit();
                 } else {
-                    $errors[] = "Invalid code. Please try again.";
+                    $errors[] = "Nambari si sahihi. Tafadhali jaribu tena.";
                 }
             }
         }
@@ -49,21 +49,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="sw">
 
 <head>
     <meta charset="UTF-8" />
-    <title>Verify Reset Code | SMART NDOA SYSTEM</title>
+    <title>Thibitisha Nambari ya Urejeshaji | SMART NDOA SYSTEM</title>
     <link rel="stylesheet" href="../style.css" />
 </head>
 
 <body>
     <div class="login-container">
         <div class="user-logo">
-            <img src="../Logo/logo.JPG" alt="Mufti Logo" />
+            <img src="../Logo/logo.JPG" alt="Nembo ya Mufti" />
         </div>
 
-        <h3 style="text-align:center;">Verify Reset Code</h3>
+        <h3 style="text-align:center;">Thibitisha Nambari ya Urejeshaji</h3>
 
         <?php if (!empty($errors)): ?>
             <script>
@@ -77,18 +77,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     type="text"
                     name="code"
                     maxlength="6"
-                    placeholder="Enter 6-digit code"
+                    placeholder="Ingiza nambari ya tarakimu 6"
                     required
                     pattern="\d{6}"
-                    title="Please enter exactly 6 digits"
+                    title="Tafadhali ingiza tarakimu 6 pekee"
                 />
             </div>
 
-            <button type="submit">Verify Code</button>
+            <button type="submit">Thibitisha Nambari</button>
         </form>
 
         <p class="register-link">
-            Didn't get a code? <a href="forgot_password.php">Request again</a>
+            Hukupokea nambari? <a href="forgot_password.php">Omba tena</a>
         </p>
     </div>
 </body>

@@ -27,19 +27,20 @@ $form = $result->fetch_assoc();
 <html lang="sw">
 <head>
     <meta charset="UTF-8">
-    <title>Edit application_form</title>
+    <title>Hariri Fomu ya Maombi</title>
     <link rel="stylesheet" href="../dashboard.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
     .edit-form-container {
-        width: 90%;
+        width: 100%;
+        max-width: 1000px;
         margin: 30px auto;
         padding: 25px;
         background-color: #fff;
         border-radius: 10px;
         box-shadow: 0 0 15px rgba(0,0,0,0.1);
-        max-height: auto;
         overflow-y: auto;
+        font-family: Arial, sans-serif;
     }
 
     .edit-form-container h2 {
@@ -66,6 +67,7 @@ $form = $result->fetch_assoc();
         border-radius: 5px;
         font-size: 14px;
         font-family: Arial, sans-serif;
+        box-sizing: border-box;
     }
 
     .edit-form-container textarea {
@@ -90,33 +92,42 @@ $form = $result->fetch_assoc();
     .submit-btn:hover {
         background-color: #0056b3;
     }
+
+    .kitambulisho-img {
+        width: 150px;
+        border-radius: 5px;
+        margin-bottom: 10px;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+        transition: transform 0.2s ease;
+    }
+    .kitambulisho-img:hover {
+        transform: scale(1.05);
+    }
     </style>
 </head>
 <body>
 <div class="dashboard-container">
-    <!-- Sidebar -->
     <?php include '../sidebar.php'; ?>
 
-    <!-- Main Content -->
     <div class="main-content">
         <header>
-            <h1>Edit Application Form</h1>
+            <h1>Rekebisha Fomu Ya Maombi</h1>
         </header>
 
         <form method="POST" action="update_application.php" class="edit-form-container" enctype="multipart/form-data">
-            <input type="hidden" name="form_id" value="<?= $form['form_id'] ?>">
+            <input type="hidden" name="form_id" value="<?= htmlspecialchars($form['form_id']) ?>">
 
             <label>Jina Kamili</label>
             <input type="text" name="full_name" value="<?= htmlspecialchars($form['full_name']) ?>" required>
 
             <label>Jinsia</label>
             <select name="gender" required>
-                <option value="male" <?= $form['gender'] == 'male' ? 'selected' : '' ?>>Me</option>
-                <option value="female" <?= $form['gender'] == 'female' ? 'selected' : '' ?>>Ke</option>
+                <option value="male" <?= $form['gender'] == 'male' ? 'selected' : '' ?>>Mwanaume</option>
+                <option value="female" <?= $form['gender'] == 'female' ? 'selected' : '' ?>>Mwanamke</option>
             </select>
 
             <label>Tarehe ya Kuzaliwa</label>
-            <input type="date" name="dob" value="<?= $form['dob'] ?>" required>
+            <input type="date" name="dob" value="<?= htmlspecialchars($form['dob']) ?>" required>
 
             <label>Uraia</label>
             <input type="text" name="nationality" value="<?= htmlspecialchars($form['nationality']) ?>" required>
@@ -128,7 +139,7 @@ $form = $result->fetch_assoc();
             <input type="text" name="district" value="<?= htmlspecialchars($form['district']) ?>" required>
 
             <label>Namba ya Simu</label>
-            <input type="text" name="phone" value="<?= $form['phone'] ?>" required>
+            <input type="text" name="phone" value="<?= htmlspecialchars($form['phone']) ?>" required>
 
             <label>Umeajiriwa?</label>
             <select name="employed" required>
@@ -139,7 +150,7 @@ $form = $result->fetch_assoc();
             <label>Sehemu ya Kazi</label>
             <select name="workplace">
                 <option value="">--Chagua--</option>
-                <option value="serekalini" <?= $form['workplace'] == 'serekalini' ? 'selected' : '' ?>>Serikali</option>
+                <option value="serikali" <?= $form['workplace'] == 'serikali' ? 'selected' : '' ?>>Serikali</option>
                 <option value="binafsi" <?= $form['workplace'] == 'binafsi' ? 'selected' : '' ?>>Binafsi</option>
             </select>
 
@@ -160,18 +171,20 @@ $form = $result->fetch_assoc();
 
             <label>Picha ya Kitambulisho</label><br>
             <?php if (!empty($form['id_picture'])): ?>
-                <img src="../uploads/<?= htmlspecialchars($form['id_picture']) ?>" alt="ID Picture" style="width: 150px; margin-bottom: 10px;"><br>
+                <img src="../applicant/<?= htmlspecialchars($form['id_picture']) ?>" alt="Picha ya Kitambulisho" class="kitambulisho-img">
+            <?php else: ?>
+                <p>Hakuna picha ya kitambulisho iliyopakiwa.</p>
             <?php endif; ?>
-            <input type="file" name="id_picture">
+            <input type="file" name="id_picture" accept="image/*">
 
             <label>Status ya Maombi</label>
             <select name="status">
-                <option value="pending" <?= $form['status'] == 'pending' ? 'selected' : '' ?>>Pending</option>
-                <option value="approved" <?= $form['status'] == 'approved' ? 'selected' : '' ?>>Approved</option>
-                <option value="rejected" <?= $form['status'] == 'rejected' ? 'selected' : '' ?>>Rejected</option>
+                <option value="pending" <?= $form['status'] == 'pending' ? 'selected' : '' ?>>Inasubiri</option>
+                <option value="approved" <?= $form['status'] == 'approved' ? 'selected' : '' ?>>Imekubaliwa</option>
+                <option value="rejected" <?= $form['status'] == 'rejected' ? 'selected' : '' ?>>Imekataliwa</option>
             </select>
 
-            <button type="submit" class="submit-btn">Save</button>
+            <button type="submit" class="submit-btn"><i class="fas fa-save"></i> Hifadhi</button>
         </form>
     </div>
 </div>

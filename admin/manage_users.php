@@ -11,10 +11,10 @@ if (!$result) {
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="sw">
 <head>
     <meta charset="UTF-8">
-    <title>Manage Users</title>
+    <title>Simamia Watumiaji</title>
     <link rel="stylesheet" href="../dashboard.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
@@ -63,34 +63,27 @@ if (!$result) {
             opacity: 0.7;
         }
     </style>
-    <script>
-        if (window.location.search.includes('success=1')) {
-            const url = new URL(window.location);
-            url.searchParams.delete('success');
-            window.history.replaceState({}, document.title, url.toString());
-        }
-    </script>
 </head>
 <body>
 
 <?php if (isset($_GET['success']) && $_GET['success'] == 1): ?>
-<script>alert("User data updated successfully!");</script>
+<script>alert("Taarifa za mtumiaji zimefanikiwa kusasishwa!");</script>
 <?php endif; ?>
 
 <div class="dashboard-container">
     <?php include '../sidebar.php'; ?>
     <div class="main-content">
-        <header><h1>Manage Users</h1></header>
+        <header><h1>Simamia Watumiaji</h1></header>
 
         <div class="users">
             <table>
                 <thead>
                     <tr>
-                        <th>S/N</th>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Role</th>
-                        <th>Action</th>
+                        <th>Namba</th>
+                        <th>Jina</th>
+                        <th>Barua Pepe</th>
+                        <th>Cheo</th>
+                        <th>Hatua</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -104,13 +97,13 @@ if (!$result) {
                             <td><?= htmlspecialchars($row['role']) ?></td>
                             <td>
                                 <a href="edit_users.php?id=<?= $row['user_id'] ?>" 
-                                   title="Edit" 
+                                   title="Hariri" 
                                    class="icon-action icon-edit">
                                     <i class="fas fa-edit"></i>
                                 </a>
                                 <a href="delete_users.php?id=<?= $row['user_id'] ?>" 
-                                   title="Delete" 
-                                   onclick="return confirm('Are you sure you want to delete this user?');" 
+                                   title="Futa" 
+                                   onclick="return confirm('Una uhakika unataka kufuta mtumiaji huyu?');" 
                                    class="icon-action icon-delete">
                                     <i class="fas fa-trash-alt"></i>
                                 </a>
@@ -125,5 +118,3 @@ if (!$result) {
 
 </body>
 </html>
-
-<?php mysqli_close($conn); ?>

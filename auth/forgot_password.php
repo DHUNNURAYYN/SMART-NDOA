@@ -1,5 +1,4 @@
 <?php
-
 session_start();
 include '../connection.php';
 require '../PHPMailer-master/src/PHPMailer.php';
@@ -15,7 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = isset($_POST['email']) ? trim($_POST['email']) : '';
 
     if (empty($email)) {
-        $errors[] = "Please enter your email address.";
+        $errors[] = "Tafadhali ingiza barua pepe yako.";
     } else {
         // Check if email exists in users table
         $stmt = $conn->prepare("SELECT user_id, full_name FROM users WHERE email = ?");
@@ -24,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $res = $stmt->get_result();
 
         if ($res->num_rows === 0) {
-            $errors[] = "No account found with that email.";
+            $errors[] = "Hakuna akaunti yenye barua pepe hiyo.";
         } else {
             // Generate reset code
             $code = random_int(100000, 999999);
@@ -52,51 +51,51 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $mail->SMTPSecure = 'tls';
                 $mail->Port       = 587;
 
-                $mail->setFrom('othmanhamad130@gmail.com', 'SMART NDOA - Password Reset');
+                $mail->setFrom('othmanhamad130@gmail.com', 'SMART NDOA - Urejeshaji Nenosiri');
                 $mail->addAddress($email);
 
                 $mail->isHTML(true);
-                $mail->Subject = 'Your Password Reset Code';
-                $mail->Body    = "Your reset code is: <b>{$code}</b><br>This code will expire in 10 minutes.";
+                $mail->Subject = 'Nambari Yako ya Urejeshaji Nenosiri';
+                $mail->Body    = "Nambari yako ya kurejesha nenosiri ni: <b>{$code}</b><br>Nambari hii itaisha muda wake ndani ya dakika 10.";
 
                 $mail->send();
 
                 $_SESSION['reset_email'] = $email;
-                $_SESSION['msg'] = "A reset code was sent to your email.";
+                $_SESSION['msg'] = "Nambari ya urejeshaji imetumwa kwenye barua pepe yako.";
                 header("Location: verify_code.php");
                 exit();
             } catch (Exception $e) {
-                $errors[] = "Email could not be sent. Mailer Error: {$mail->ErrorInfo}";
+                $errors[] = "Barua pepe haikuweza kutumwa. Tatizo la kisafirisha barua: {$mail->ErrorInfo}";
             }
         }
     }
 }
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="sw">
 <head>
     <meta charset="UTF-8">
-    <title>Forgot Password | SMART NDOA SYSTEM</title>
-    <link rel="stylesheet" href="../style.css">
+    <title>Kusahau Nenosiri | SMART NDOA SYSTEM</title>
+    <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
 
     <div class="login-container">
         <div class="user-logo">
-            <img src="../Logo/logo.JPG" alt="Mufti Logo">
+            <img src="../Logo/logo.JPG" alt="Nembo ya Mufti">
         </div>
 
-        <h3 style="text-align:center;">Forgot Password</h3>
+        <h3 style="text-align:center;">Umesahau Nenosiri</h3>
 
-        <!-- ✅ Show error messages -->
+        <!--  Show error messages -->
         <?php if (!empty($errors)): ?>
             <script>
                 alert("<?= htmlspecialchars(implode('\n', $errors), ENT_QUOTES) ?>");
             </script>
         <?php endif; ?>
 
-        <!-- ✅ Show success messages -->
+        <!--    Show success messages -->
         <?php if (!empty($_SESSION['msg'])): ?>
             <script>
                 alert("<?= htmlspecialchars($_SESSION['msg'], ENT_QUOTES) ?>");
@@ -107,14 +106,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <form action="" method="post">
             <div class="input-group">
                 <i class="fas fa-envelope"></i>
-                <input type="email" name="email" placeholder="Enter your email" required>
+                <input type="email" name="email" placeholder="Ingiza barua pepe yako" required>
             </div>
 
-            <button type="submit" name="submit">Send Reset Code</button>
+            <button type="submit" name="submit">Tuma Nambari ya Urejeshaji</button>
         </form>
 
-        <p class="register-link"><a href="login.php">Back to Login</a></p>
+        <p class="register-link"><a href="login.php">Rudi kwenye Kuingia</a></p>
     </div>
 
 </body>
-</html>  
+</html>

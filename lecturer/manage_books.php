@@ -4,20 +4,29 @@ include '../session_check.php';
 
 // Delete Book
 if (isset($_GET['delete'])) {
-    $id = $_GET['delete'];
+    $id = (int)$_GET['delete']; // Cast to int for safety
 
-    // Delete the file first
-    $getFile = mysqli_query($conn, "SELECT file_path FROM books WHERE book_id = $id");
-    if ($getFile && mysqli_num_rows($getFile) > 0) {
-        $fileRow = mysqli_fetch_assoc($getFile);
+    // Prepare statement to select file_path
+    $stmt = $conn->prepare("SELECT file_path FROM books WHERE book_id = ?");
+    $stmt->bind_param("i", $id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if ($result && $result->num_rows > 0) {
+        $fileRow = $result->fetch_assoc();
         $filePath = $fileRow['file_path'];
         if (file_exists($filePath)) {
             unlink($filePath); // remove file from folder
         }
     }
+    $stmt->close();
 
-    // Then delete from DB
-    mysqli_query($conn, "DELETE FROM books WHERE book_id = $id");
+    // Prepare delete statement
+    $del_stmt = $conn->prepare("DELETE FROM books WHERE book_id = ?");
+    $del_stmt->bind_param("i", $id);
+    $del_stmt->execute();
+    $del_stmt->close();
+
     header("Location: manage_books.php");
     exit();
 }
@@ -49,21 +58,17 @@ if (isset($_GET['delete'])) {
         thead {
             background-color: #228B22;
         }
-
         .icon-action {
             font-size: 18px;
             margin-right: 10px;
+            text-decoration: none;
         }
-
         .icon-download {
             color: #28a745;
         }
-
         .icon-delete {
             color: #e74c3c;
         }
-
-
         .add-book {
             display: inline-block;
             color: #007bff;
@@ -71,22 +76,19 @@ if (isset($_GET['delete'])) {
             margin-top: 10px;
             text-decoration: none;
         }
-
         .add-book:hover {
             opacity: 0.8;
         }
-        .add-book-container{
+        .add-book-container {
             position: fixed;
             bottom: 20px;
             right: 20px;
-    
             border-radius: 50%;
             width: 100px;
             height: 50px;
             display: flex;
             align-items: center;
             justify-content: center;
-
         }
     </style>
 </head>
@@ -115,27 +117,27 @@ if (isset($_GET['delete'])) {
                 </thead>
                 <tbody>
                     <?php
-                    $result = mysqli_query($conn, "
+                    $result = $conn->query("
                         SELECT books.*, users.full_name 
                         FROM books 
                         JOIN users ON books.uploaded_by = users.user_id 
                         ORDER BY uploaded_on DESC
                     ");
                     $serial = 0;
-                    while ($row = mysqli_fetch_assoc($result)) {
+                    while ($row = $result->fetch_assoc()) {
                         $serial++;
                         echo "<tr>
-                            <td>$serial</td>
-                            <td>{$row['title']}</td>
-                            <td>{$row['author']}</td>
-                            <td>{$row['category']}</td>
-                            <td>{$row['full_name']}</td>
-                            <td>{$row['uploaded_on']}</td>
+                            <td>" . htmlspecialchars($serial) . "</td>
+                            <td>" . htmlspecialchars($row['title']) . "</td>
+                            <td>" . htmlspecialchars($row['author']) . "</td>
+                            <td>" . htmlspecialchars($row['category']) . "</td>
+                            <td>" . htmlspecialchars($row['full_name']) . "</td>
+                            <td>" . htmlspecialchars($row['uploaded_on']) . "</td>
                             <td>
-                                <a href='{$row['file_path']}' title='Download' class='icon-action icon-download' download>
+                                <a href='" . htmlspecialchars($row['file_path']) . "' title='Download' class='icon-action icon-download' download>
                                     <i class='fas fa-download'></i>
                                 </a>
-                                <a href='?delete={$row['book_id']}' title='Delete' class='icon-action icon-delete' onclick='return confirm(\"Are you sure you want to delete this book?\")'>
+                                <a href='?delete=" . htmlspecialchars($row['book_id']) . "' title='Delete' class='icon-action icon-delete' onclick='return confirm(\"Are you sure you want to delete this book?\")'>
                                     <i class='fas fa-trash-alt'></i>
                                 </a>
                             </td>
@@ -146,10 +148,10 @@ if (isset($_GET['delete'])) {
             </table>
 
             <!-- Add Book Icon -->
-             <div class="add-book-container">
-            <a href="add_books.php" class="add-book" title="Add New Book">
-                <i class="fas fa-plus-circle"></i>
-            </a>
+            <div class="add-book-container">
+                <a href="add_books.php" class="add-book" title="Add New Book">
+                    <i class="fas fa-plus-circle"></i>
+                </a>
             </div>  
         </div>
     </div>

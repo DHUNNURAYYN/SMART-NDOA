@@ -255,7 +255,7 @@ if ($result && $result->num_rows > 0) {
                     <input type="text" name="phone" required>
 
                     <label>Umeajiriwa?</label>
-                    <input type="radio" name="umeajiriwa" value="ndio"> Ndio
+                    <input type="radio" name="umeajiriwa" value="ndio" required> Ndio
                     <input type="radio" name="umeajiriwa" value="hapana"> Hapana
 
                     <label>Kama Ndio - Sehemu</label>

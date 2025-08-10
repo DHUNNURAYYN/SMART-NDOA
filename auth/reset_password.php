@@ -18,11 +18,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Validations
     if (empty($new_password) || empty($confirm_password)) {
-        $errors[] = "Both password fields are required.";
+        $errors[] = "Sehemu zote za nenosiri zinahitajika.";
     } elseif ($new_password !== $confirm_password) {
-        $errors[] = "Passwords do not match.";
+        $errors[] = "Manenosiri hayalingani.";
     } elseif (strlen($new_password) < 6) {
-        $errors[] = "Password must be at least 6 characters.";
+        $errors[] = "Nenosiri lazima liwe na angalau herufi 6.";
     } else {
         $password_hash = password_hash($new_password, PASSWORD_DEFAULT);
         $stmt = $conn->prepare("UPDATE users SET password = ? WHERE email = ?");
@@ -37,30 +37,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             unset($_SESSION['reset_confirmed']);
             unset($_SESSION['reset_email']);
 
-            $success = "Password updated successfully.";
+            $success = "Nenosiri limeboreshwa kwa mafanikio.";
         } else {
-            $errors[] = "Failed to update password. Try again later.";
+            $errors[] = "Imeshindikana kuboresha nenosiri. Tafadhali jaribu tena baadaye.";
         }
     }
 }
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="sw">
 
 <head>
     <meta charset="UTF-8" />
-    <title>Set New Password | SMART NDOA SYSTEM</title>
-    <link rel="stylesheet" href="../style.css" />
+    <title>Weka Nenosiri Jipya | SMART NDOA SYSTEM</title>
+    <link rel="stylesheet" href="style.css" />
 </head>
 
 <body>
     <div class="login-container">
         <div class="user-logo">
-            <img src="../Logo/logo.JPG" alt="Mufti Logo" />
+            <img src="../Logo/logo.JPG" alt="Nembo ya Mufti" />
         </div>
 
-        <h3 style="text-align:center;">Set New Password</h3>
+        <h3 style="text-align:center;">Weka Nenosiri Jipya</h3>
 
         <?php if (!empty($errors)): ?>
             <script>
@@ -76,14 +76,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <?php else: ?>
     <form method="post" action="">
         <div class="input-group">
-            <input type="password" name="new_password" placeholder="New Password" required minlength="6" />
+            <input type="password" name="new_password" placeholder="Nenosiri Jipya" required minlength="6" />
         </div>
 
         <div class="input-group">
-            <input type="password" name="confirm_password" placeholder="Confirm New Password" required minlength="6" />
+            <input type="password" name="confirm_password" placeholder="Thibitisha Nenosiri Jipya" required minlength="6" />
         </div>
 
-        <button type="submit">Set Password</button>
+        <button type="submit">Weka Nenosiri</button>
     </form>
 <?php endif; ?>
 

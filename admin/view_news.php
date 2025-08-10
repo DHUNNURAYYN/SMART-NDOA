@@ -6,29 +6,38 @@ include '../session_check.php';
 if (isset($_GET['delete'])) {
     $news_id = intval($_GET['delete']);
 
-    // Optional: Delete the image from uploads folder (if used)
-    $getImg = $conn->query("SELECT image FROM news WHERE news_id = $news_id");
-    if ($getImg && $getImg->num_rows > 0) {
-        $imgRow = $getImg->fetch_assoc();
-        $imgPath = 'uploads/' . $imgRow['image'];
+    // Pata picha kutoka DB
+    $getImg = $conn->prepare("SELECT image FROM news WHERE news_id = ?");
+    $getImg->bind_param("i", $news_id);
+    $getImg->execute();
+    $resultImg = $getImg->get_result();
+
+    if ($resultImg && $resultImg->num_rows > 0) {
+        $imgRow = $resultImg->fetch_assoc();
+        $imgPath = $imgRow['image']; // Tumia path kamili iliyohifadhiwa DB
         if (file_exists($imgPath)) {
-            unlink($imgPath);
+            unlink($imgPath); // Futa picha
         }
     }
+    $getImg->close();
 
-    // Delete from DB
-    $conn->query("DELETE FROM news WHERE news_id = $news_id");
-    header("Location: view_news.php"); // Redirect to refresh
+    // Futa rekodi DB kwa usalama
+    $delStmt = $conn->prepare("DELETE FROM news WHERE news_id = ?");
+    $delStmt->bind_param("i", $news_id);
+    $delStmt->execute();
+    $delStmt->close();
+
+    header("Location: view_news.php"); // Rudisha ukurasa wa habari
     exit();
 }
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="sw">
 <head>
     <meta charset="UTF-8">
-    <title>View News</title>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <title>Tazama Habari</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="stylesheet" href="../dashboard.css">
     <style>
         .news-container {
@@ -55,7 +64,7 @@ if (isset($_GET['delete'])) {
         }
 
         th {
-            background-color:#228B22;
+            background-color: #228B22;
             color: white;
         }
 
@@ -79,18 +88,17 @@ if (isset($_GET['delete'])) {
             min-height: 100vh;
         }
 
-      .delete-btn {
-    background-color: #cc0000;
-    color: white;
-    padding: 6px 12px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
-.delete-btn:hover {
-    background-color: #990000;
-}
-
+        .delete-btn {
+            background-color: #cc0000;
+            color: white;
+            padding: 6px 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .delete-btn:hover {
+            background-color: #990000;
+        }
     </style>
 </head>
 <body>
@@ -100,19 +108,19 @@ if (isset($_GET['delete'])) {
 
     <div class="main-content">
         <header>
-            <h1>All Posted News</h1>
+            <h1>Habari Zote Zilizotumwa</h1>
         </header>
 
         <div class="news-container">
             <table>
                 <thead>
                     <tr>
-                        <th>S/N</th>
-                        <th>Image</th>
-                        <th>Title</th>
-                        <th>Date Posted</th>
-                        <th>Content</th>
-                        <th>Action</th>
+                        <th>Nambari</th>
+                        <th>Picha</th>
+                        <th>Kichwa cha Habari</th>
+                        <th>Tarehe ya Kuchapishwa</th>
+                        <th>Maelezo</th>
+                        <th>Kitendo</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -128,9 +136,9 @@ if (isset($_GET['delete'])) {
                         <td><?php echo $sn++; ?></td>
                         <td>
                             <?php if ($row['image']): ?>
-                                <img src="<?php echo htmlspecialchars($row['image']); ?>" alt="News Image" class="news-img">
+                                <img src="<?php echo htmlspecialchars($row['image']); ?>" alt="Picha ya Habari" class="news-img">
                             <?php else: ?>
-                                <span>No image</span>
+                                <span>Hakuna Picha</span>
                             <?php endif; ?>
                         </td>
                         <td><?php echo htmlspecialchars($row['title']); ?></td>
@@ -138,18 +146,17 @@ if (isset($_GET['delete'])) {
                         <td class="content-cell"><?php echo htmlspecialchars($row['content']); ?></td>
                         <td>
                             <a href="?delete=<?php echo $row['news_id']; ?>" 
-                            onclick="return confirm('Are you sure you want to delete this news?');" 
-                            title="Delete" 
-                            style="color: #e74c3c; font-size: 18px; display:inline-block;">
+                               onclick="return confirm('Una uhakika unataka kufuta habari hii?');" 
+                               title="Futa Habari" 
+                               style="color: #e74c3c; font-size: 18px; display:inline-block;">
                                 <i class="fas fa-trash-alt"></i>
                             </a>
-
                         </td>
                     </tr>
                     <?php
                         endwhile;
                     else:
-                        echo "<tr><td colspan='6'>No news found.</td></tr>";
+                        echo "<tr><td colspan='6'>Hakuna habari zilizopatikana.</td></tr>";
                     endif;
                     ?>
                 </tbody>

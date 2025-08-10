@@ -1,3 +1,3 @@
 <?php
-echo "<h2 style='color:red; text-align:center;'>⚠️ Sorry, you are not eligible for a certificate. Please wait for another semester.</h2>";
+echo "<h2 style='color: red; text-align: center; margin-top: 30px;'>⚠️ Samahani, huna sifa ya kupata cheti kwa sasa. Tafadhali subiri muhula mwingine.</h2>";
 ?>

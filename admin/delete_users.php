@@ -3,7 +3,7 @@ include '../connection.php'; // Your connection file
 include '../session_check.php';
 
 if (!isset($_GET['id'])) {
-    echo "User ID not provided.";
+    echo "ID ya mtumiaji haijatolewa.";
     exit;
 }
 
@@ -17,6 +17,6 @@ if ($stmt->execute()) {
     header("Location: manage_users.php");
     exit;
 } else {
-    echo "Failed to delete user.";
+    echo "Imeshindikana kufuta mtumiaji.";
 }
 ?>

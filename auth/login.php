@@ -31,22 +31,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             }
             exit();
         } else {
-            $message = "Incorrect phone number or password.";
+            $message = "Namba ya simu au nenosiri si sahihi.";
         }
     } else {
-        $message = "No account found with that phone number.";
+        $message = "Hakuna akaunti iliyosajiliwa kwa namba hiyo ya simu.";
     }
 
     $stmt->close();
 }
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="sw">
 
 <head>
     <meta charset="UTF-8">
-    <title>Login | SMART NDOA SYSTEM</title>
-    <link rel="stylesheet" href="../style.css">
+    <title>Kuingia | MFUMO MAHUSUSI WA NDOA</title>
+    <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <script>
         function validateForm() {
@@ -54,23 +54,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             var password = document.forms["loginForm"]["password"].value;
 
             if (phone.trim() === "") {
-                alert("Phone number is required.");
+                alert("Tafadhali weka namba ya simu.");
                 return false;
             }
 
             var phonePattern = /^[0-9]{7,15}$/;
             if (!phonePattern.test(phone)) {
-                alert("Enter a valid phone number (7–15 digits).");
+                alert("Weka namba halali ya simu (tarakimu 7–15).");
                 return false;
             }
 
             if (password === "") {
-                alert("Password is required.");
+                alert("Tafadhali weka nenosiri.");
                 return false;
             }
 
             if (password.length < 6) {
-                alert("Password must be at least 6 characters long.");
+                alert("Nenosiri lazima liwe angalau herufi 6.");
                 return false;
             }
 
@@ -81,14 +81,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 <body>
 
-    <!-- ✅ JavaScript alert for registration success -->
+    <!-- ✅ JavaScript alert kwa mafanikio ya usajili -->
     <?php if (isset($_GET['sms'])): ?>
         <script>
             alert("<?= htmlspecialchars($_GET['sms'], ENT_QUOTES) ?>");
         </script>
     <?php endif; ?>
 
-    <!-- ✅ JavaScript alert for login errors -->
+    <!-- ✅ JavaScript alert kwa makosa ya kuingia -->
     <?php if (!empty($message)): ?>
         <script>
             alert("<?= htmlspecialchars($message, ENT_QUOTES) ?>");
@@ -97,29 +97,29 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     <div class="login-container">
         <div class="user-logo">
-            <img src="../Logo/logo.JPG" alt="Mufti Logo">
+            <img src="../Logo/logo.JPG" alt="Nembo ya Mufti">
         </div>
 
         <form name="loginForm" action="login.php" method="post" onsubmit="return validateForm()">
             <div class="input-group">
                 <i class="fas fa-phone"></i>
-                <input type="text" name="phone" placeholder="Phone Number" required>
+                <input type="text" name="phone" placeholder="Namba ya Simu" required>
             </div>
 
             <div class="input-group">
                 <i class="fas fa-lock"></i>
-                <input type="password" name="password" placeholder="Password" required>
+                <input type="password" name="password" placeholder="Nenosiri" required>
             </div>
 
             <div class="options">
-                <label><input type="checkbox" name="remember"> Remember me</label>
-                <a href="forgot_password.php">Forgot Password?</a>
+                <label><input type="checkbox" name="remember"> Nikumbuke</label>
+                <a href="forgot_password.php">Umesahau Nenosiri?</a>
             </div>
 
-            <button type="submit" name="submit">Login</button>
+            <button type="submit" name="submit">Ingia</button>
         </form>
 
-        <p class="register-link">Don’t have an account? <a href="register.php">Create Account</a></p>
+        <p class="register-link">Huna akaunti? <a href="register.php">Tengeneza Akaunti</a></p>
     </div>
 </body>
 </html>

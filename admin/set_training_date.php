@@ -22,18 +22,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt->bind_param("si", $start_date, $batch_number);
 
     if ($stmt->execute()) {
-        $message = "<div class='success'>✅ Tarehe na mkupuo zimehifadhiwa kikamilifu!</div>";
+        $message = "<div class='success'> Tarehe na mkupuo zimehifadhiwa kikamilifu!</div>";
         $latestBatch = $batch_number; // Update immediately
     } else {
-        $message = "<div class='error'>❌ Imeshindikana kuhifadhi taarifa.</div>";
+        $message = "<div class='error'> Imeshindikana kuhifadhi taarifa.</div>";
     }
 }
 
-?><!DOCTYPE html>
-<html lang="en">
+?>
+<!DOCTYPE html>
+<html lang="sw">
 <head>
     <meta charset="UTF-8" />
-    <title>Set Batch & Training Date</title>
+    <title>Weka Kundi na Tarehe ya Mafunzo</title>
     <link rel="stylesheet" href="../dashboard.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <style>
@@ -112,24 +113,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <!-- Main Content -->
     <div class="main-content">
         <header>
-            <h1>Manage Trainee</h1>
+            <h1>Simamia Wanafunzi</h1>
         </header>
 
         <div class="form-container">
-            <h2>Set Batch and Training Start Date</h2>
+            <h2>Weka Kundi na Tarehe ya Kuanza Mafunzo</h2>
 
-            <h3 style="text-align:center; color:#228B22;">Current Batch: <?= htmlspecialchars($latestBatch) ?></h3>
+            <h3 style="text-align:center; color:#228B22;">Kundi la Sasa: <?= htmlspecialchars($latestBatch) ?></h3>
 
             <?= $message ?>
 
             <form method="POST">
-                <label for="batch_number">Batch Number:</label>
+                <label for="batch_number">Nambari ya Kundi:</label>
                 <input type="number" name="batch_number" id="batch_number" required>
 
-                <label for="start_date">Training Start Date:</label>
+                <label for="start_date">Tarehe ya Kuanza Mafunzo:</label>
                 <input type="date" name="start_date" id="start_date" required>
 
-                <button type="submit"><i class="fas fa-save"></i> Save Information</button>
+                <button type="submit"></i> Hifadhi </button>
             </form>
         </div>
     </div>
